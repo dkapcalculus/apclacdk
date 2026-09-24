@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calc Lab · AP Calculus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F7FA; --surface:#FFFFFF; --grid:#DCE6EE; --grid-strong:#B9CBD9;
+  --ink:#1B2A4A; --ink-soft:#4A5B7A; --pencil:#F2B705; --pencil-ink:#3A2C00;
+  --red:#C8372D; --green:#2E7D4F; --blue:#2F6FDE; --purple:#7A4FC4; --line:#C9D6E2;
+  --curve:#2F6FDE; --tangent:#C8372D; --rect:rgba(242,183,5,.38); --rect-edge:#B98A00;
+  --radius-s:6px; --radius-m:12px;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --math:"STIX Two Text","Cambria Math","Times New Roman",serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1726; --surface:#172238; --grid:#1E2B44; --grid-strong:#2C3D5E;
+    --ink:#E7EDF7; --ink-soft:#A8B6CE; --line:#2C3D5E;
+    --curve:#6EA2FF; --tangent:#FF7A6E; --rect:rgba(242,183,5,.28); --rect-edge:#F2B705;
+    --red:#FF7A6E; --green:#5CC98A; --blue:#6EA2FF; --purple:#B894FF;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1726; --surface:#172238; --grid:#1E2B44; --grid-strong:#2C3D5E;
+  --ink:#E7EDF7; --ink-soft:#A8B6CE; --line:#2C3D5E;
+  --curve:#6EA2FF; --tangent:#FF7A6E; --rect:rgba(242,183,5,.28); --rect-edge:#F2B705;
+  --red:#FF7A6E; --green:#5CC98A; --blue:#6EA2FF; --purple:#B894FF;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 120px)}
+body{
+  margin:0;min-height:100%;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.m{font-family:var(--math);font-size:1.08em}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px 64px}
+.hidden{display:none!important}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--paper);border-bottom:2px solid var(--ink)}
+.top-inner{max-width:1000px;margin:0 auto;padding:12px 18px 0}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px}
+.brand{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.brand b{font-family:var(--display);font-weight:800;font-size:1.55rem;letter-spacing:-.02em;line-height:1}
+.brand i{font-family:var(--math);font-size:1.4rem;color:var(--ink-soft)}
+.course-pick{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--ink-soft)}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{border:none;background:var(--surface);padding:4px 12px;font-weight:700;font-size:.9rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+nav.main{display:flex;gap:2px;overflow-x:auto;scrollbar-width:thin}
+nav.main a{
+  text-decoration:none;border:2px solid transparent;border-bottom:none;padding:8px 13px 9px;
+  font-family:var(--display);font-weight:700;font-size:.97rem;border-radius:var(--radius-s) var(--radius-s) 0 0;color:var(--ink-soft);white-space:nowrap
+}
+nav.main a[aria-current="page"]{background:var(--surface);border-color:var(--ink);color:var(--ink);margin-bottom:-2px;padding-bottom:11px}
+
+/* generic */
+.page{padding-top:26px}
+h1.title{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.5vw,2.6rem);letter-spacing:-.025em;line-height:1.05;margin:0 0 10px}
+h2{font-family:var(--display);font-weight:700;font-size:1.35rem;margin:0 0 8px;letter-spacing:-.01em}
+h3{font-family:var(--display);font-weight:700;font-size:1.07rem;margin:0 0 8px}
+.lead{max-width:62ch;margin:0 0 22px;color:var(--ink-soft);font-size:1.05rem}
+.note{font-size:.92rem;color:var(--ink-soft)}
+.sheet{background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius-m);padding:20px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{border:2px solid var(--ink);background:var(--surface);padding:8px 14px;border-radius:var(--radius-s);font-weight:700;text-decoration:none;display:inline-block}
+.btn.primary{background:var(--pencil);color:var(--pencil-ink);border-color:var(--pencil-ink)}
+.btn.quiet{border-color:var(--line)}
+.btn.small{padding:4px 10px;font-size:.88rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+select,input[type=date],input[type=text],input[type=number],textarea{border:2px solid var(--line);background:var(--surface);border-radius:var(--radius-s);padding:8px 10px}
+input[type=text].mathin{font-family:var(--math);font-size:1.15rem}
+label.lbl{font-size:.9rem;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px}
+.subnav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.subnav a{text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;background:var(--surface)}
+.subnav a[aria-current="page"]{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.grid2{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:760px){.grid2{grid-template-columns:1fr 1fr}}
+.bar{height:10px;background:var(--grid);border-radius:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--green)}
+
+/* home */
+.hero{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin-bottom:26px}
+@media (min-width:820px){.hero{grid-template-columns:1.05fr 1fr}}
+.hero-graph{aspect-ratio:4/3;border:2px solid var(--ink);border-radius:var(--radius-m);background:var(--surface);overflow:hidden;position:relative}
+.hero-graph canvas{width:100%;height:100%;display:block}
+.hero-graph .cap{position:absolute;left:12px;bottom:10px;font-family:var(--math);font-size:1.05rem;background:var(--surface);padding:2px 8px;border-radius:4px}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 30px}
+.quick a{display:flex;flex-direction:column;gap:2px;text-decoration:none;background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius-m);padding:14px;box-shadow:3px 3px 0 var(--ink)}
+.quick a:hover{box-shadow:5px 5px 0 var(--pencil)}
+.quick .e{font-size:1.5rem}
+.quick b{font-family:var(--display);font-size:1.05rem}
+.quick span.note{font-size:.85rem}
+.topic-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.tcard{text-decoration:none;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius-m);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.tcard:hover{border-color:var(--ink)}
+.tcard b{font-family:var(--display)}
+.tcard .done{color:var(--green);font-size:.85rem;font-weight:700}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;border:1.5px solid var(--purple);color:var(--purple);border-radius:999px;padding:0 8px;vertical-align:middle}
+
+/* lesson */
+.lesson{max-width:74ch}
+.lesson p{margin:0 0 .9em}
+.keys{margin:0 0 1em;padding-left:1.2em}
+.keys li{margin-bottom:.4em}
+.box{border:2px solid var(--line);border-radius:var(--radius-m);padding:16px 18px;margin:18px 0;background:var(--surface)}
+.box h3{display:flex;align-items:center;gap:8px}
+.box.why{border-color:var(--purple);border-left-width:6px}
+.box.warn{border-color:var(--red);border-left-width:6px}
+.box.ex{border-color:var(--ink)}
+.box ol{margin:.2em 0 0;padding-left:1.3em}
+.box ol li{margin-bottom:.35em}
+.mistake + .mistake{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.mistake .bad{font-weight:700}
+.lesson-nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:24px}
+
+/* practice */
+.practice-grid{display:grid;grid-template-columns:1fr;gap:18px}
+@media (min-width:840px){.practice-grid{grid-template-columns:1fr 250px}}
+.qmeta{font-size:.9rem;color:var(--ink-soft);margin-bottom:8px}
+.qtext{font-family:var(--math);font-size:1.28rem;line-height:1.45;margin:0 0 16px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--surface);border-radius:var(--radius-s);padding:10px 12px;display:flex;gap:12px;align-items:baseline;font-family:var(--math);font-size:1.12rem}
+.opt .k{font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--ink-soft);min-width:1.2em}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt.sel{border-color:var(--ink);background:color-mix(in srgb,var(--pencil) 20%,var(--surface))}
+.opt.right{border-color:var(--green);background:color-mix(in srgb,var(--green) 12%,var(--surface))}
+.opt.wrong{border-color:var(--red);background:color-mix(in srgb,var(--red) 10%,var(--surface))}
+.opt:disabled{cursor:default}
+.feedback{margin-top:16px;padding:14px 16px;border-left:5px solid var(--ink);background:color-mix(in srgb,var(--grid) 45%,var(--surface))}
+.feedback.good{border-color:var(--green)}
+.feedback.bad{border-color:var(--red)}
+.feedback h4{font-family:var(--display);margin:.8em 0 .3em;font-size:.98rem}
+.feedback ol{margin:0;padding-left:1.3em}
+.feedback p{margin:.3em 0}
+.levels button{min-width:78px}
+.scores{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.scores li{font-size:.9rem}
+.timer{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--red)}
+.frq-part{margin:18px 0;padding-top:14px;border-top:1px dashed var(--line)}
+.frq-part textarea{width:100%;min-height:110px;margin-top:8px;font-family:var(--math);font-size:1.05rem}
+.frq-stem{font-size:1.08rem}
+.rubric{margin-top:10px;padding:12px 14px;background:color-mix(in srgb,var(--green) 8%,var(--surface));border:2px solid color-mix(in srgb,var(--green) 40%,var(--line));border-radius:var(--radius-s)}
+.rubric ul{margin:.3em 0 0;padding-left:1.2em}
+.solution{margin-top:10px}
+.pts{font-family:var(--display);font-weight:800}
+.frq-list{display:grid;gap:10px}
+.frq-item{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--surface);border:2px solid var(--line);border-radius:var(--radius-m);padding:14px 16px}
+.tag{font-size:.8rem;font-weight:700;border-radius:999px;padding:1px 9px;border:1.5px solid}
+.tag.calc{color:var(--blue);border-color:var(--blue)}
+.tag.nocalc{color:var(--red);border-color:var(--red)}
+
+/* visual / canvas */
+.canvas-box{position:relative;width:100%;aspect-ratio:16/10;border:2px solid var(--ink);border-radius:var(--radius-m);overflow:hidden;background:var(--surface);margin:16px 0}
+.canvas-box canvas{display:block;width:100%;height:100%}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:6px}
+.readout div{border:2px solid var(--line);border-radius:var(--radius-s);padding:8px 12px;background:var(--surface)}
+.readout b{display:block;font-family:var(--math);font-size:1.25rem;font-weight:600;overflow-wrap:anywhere}
+.readout span{font-size:.85rem;color:var(--ink-soft)}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:10px;align-items:end}
+input[type=range]{width:100%;accent-color:var(--pencil-ink)}
+.tbl-wrap{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;font-family:var(--math);min-width:420px;width:100%}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:right}
+th{font-family:var(--body);font-size:.85rem;color:var(--ink-soft);font-weight:700}
+.story{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
+.story span{font-size:.88rem;border:1.5px solid var(--line);border-radius:999px;padding:2px 10px;color:var(--ink-soft)}
+.story span.on{border-color:var(--ink);color:var(--ink);background:color-mix(in srgb,var(--pencil) 30%,var(--surface))}
+
+/* graphing */
+.analysis{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:6px}
+.analysis div{border:2px solid var(--line);border-radius:var(--radius-s);padding:10px 12px;background:var(--surface)}
+.analysis h4{margin:0 0 4px;font-size:.88rem;color:var(--ink-soft);font-family:var(--body)}
+.analysis p{margin:0;font-family:var(--math);font-size:1.08rem;overflow-wrap:anywhere}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.92rem}
+.legend label{display:flex;gap:6px;align-items:center}
+.sw{display:inline-block;width:22px;height:4px;border-radius:2px}
+.err{color:var(--red);font-weight:700}
+
+/* calculator */
+.calc-out{margin-top:16px}
+.answer{font-family:var(--math);font-size:1.45rem;padding:12px 16px;border:2px solid var(--ink);border-radius:var(--radius-s);background:color-mix(in srgb,var(--pencil) 14%,var(--surface));overflow-wrap:anywhere}
+.steps{margin-top:14px}
+.steps p{margin:0 0 .6em}
+.steps ol,.steps ul{padding-left:1.3em}
+
+/* tutor */
+.chat{display:flex;flex-direction:column;gap:14px;min-height:220px;max-height:60vh;overflow-y:auto;padding:4px 2px 10px}
+.msg{max-width:88%;padding:12px 14px;border-radius:var(--radius-m);overflow-wrap:anywhere}
+.msg.you{align-self:flex-end;background:var(--ink);color:var(--paper);border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:var(--surface);border:2px solid var(--line);border-bottom-left-radius:4px}
+.msg.ai p{margin:0 0 .6em}.msg.ai p:last-child{margin:0}
+.msg.ai ul,.msg.ai ol{margin:.2em 0 .6em;padding-left:1.3em}
+.empty{color:var(--ink-soft);text-align:center;padding:28px 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:2px dashed var(--grid-strong);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:.92rem}
+.chip:hover{border-style:solid;border-color:var(--ink)}
+.composer{display:flex;gap:10px;align-items:flex-end;border-top:2px solid var(--line);padding-top:12px}
+.composer textarea{flex:1;min-height:52px;max-height:180px;resize:vertical}
+
+/* formulas */
+.search{width:100%;font-size:1.05rem;padding:12px 14px;margin-bottom:16px}
+.fgroup{margin-bottom:22px}
+.flist{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.fitem{background:var(--surface);border:2px solid var(--line);border-radius:var(--radius-s);padding:10px 12px}
+.fitem .fn{font-size:.85rem;color:var(--ink-soft)}
+.fitem .fx{font-family:var(--math);font-size:1.15rem;overflow-wrap:anywhere}
+mark{background:var(--pencil);color:var(--pencil-ink);border-radius:2px}
+
+/* progress */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px}
+.stat{background:var(--surface);border:2px solid var(--ink);border-radius:var(--radius-m);padding:14px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:2rem;line-height:1.1}
+.stat span{font-size:.88rem;color:var(--ink-soft)}
+.prog-list{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.prog-list li{display:grid;grid-template-columns:minmax(150px,230px) 1fr 3.2em;gap:12px;align-items:center}
+.prog-list .pct{font-family:var(--display);font-weight:800;text-align:right}
+@media (max-width:560px){.prog-list li{grid-template-columns:1fr 3em}.prog-list .bar{grid-column:1/-1;order:3}}
+.countdown{display:flex;align-items:baseline;gap:12px}
+.countdown .n{font-family:var(--display);font-weight:800;font-size:3.2rem;line-height:1;letter-spacing:-.03em}
+.planout p{margin:0 0 .6em}.planout ul{padding-left:1.2em;margin:.2em 0 .6em}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+body:not(.claude) .needs-claude{display:none!important}
+body.claude .no-claude{display:none!important}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/mathjs@13.2.0/lib/browser/math.js"></script>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="top-row">
+      <a class="brand" href="#/home"><b>Calc Lab</b><i aria-hidden="true">dy/dx</i></a>
+      <div class="course-pick"><span>Course</span><div class="seg" id="courseSeg" role="group" aria-label="Course"><button data-c="AB">AB</button><button data-c="BC">BC</button></div></div>
+    </div>
+    <nav class="main" aria-label="Main">
+      <a href="#/home" data-p="home">Home</a>
+      <a href="#/learn" data-p="learn">Learn</a>
+      <a href="#/practice" data-p="practice">Practice</a>
+      <a href="#/tools" data-p="tools">Tools</a>
+      <a href="#/visualize" data-p="visualize">Visualize</a>
+      <a href="#/formulas" data-p="formulas">Formula sheet</a>
+      <a href="#/mistakes" data-p="mistakes">Common mistakes</a>
+      <a href="#/progress" data-p="progress">Progress</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<script>
+/* ===== Topics & lessons ===== */
+const TOPICS = [
+  {id:"limits", name:"Limits & Continuity", course:"AB", units:"Unit 1"},
+  {id:"derivatives", name:"Differentiation", course:"AB", units:"Units 2–3"},
+  {id:"applications", name:"Applications of Differentiation", course:"AB", units:"Units 4–5"},
+  {id:"integrals", name:"Integration & Accumulation", course:"AB", units:"Unit 6"},
+  {id:"diffeq", name:"Differential Equations", course:"AB", units:"Unit 7"},
+  {id:"appint", name:"Applications of Integration", course:"AB", units:"Unit 8"},
+  {id:"parametric", name:"Parametric Equations", course:"BC", units:"Unit 9"},
+  {id:"polar", name:"Polar Functions", course:"BC", units:"Unit 9"},
+  {id:"vectors", name:"Vector-Valued Functions", course:"BC", units:"Unit 9"},
+  {id:"series", name:"Infinite Sequences & Series", course:"BC", units:"Unit 10"},
+  {id:"taylor", name:"Taylor & Maclaurin Series", course:"BC", units:"Unit 10"},
+];
+
+const LESSONS = {
+limits:{
+  intro:["A limit describes the value f(x) approaches as x gets close to a number — not necessarily the value at that number. Limits are the foundation of calculus: both derivatives and integrals are defined as limits.",
+         "When you can plug in and get a real number, that's usually the limit. When you get 0/0, the work begins: factor, rationalize, or use a known limit."],
+  keys:["<span class='m'>lim<sub>x→a</sub> f(x) = L</span> means f(x) can be made as close to L as you like by taking x close enough to a (with x ≠ a).",
+        "A two-sided limit exists only when the left-hand and right-hand limits exist and are equal.",
+        "f is <b>continuous at a</b> when f(a) is defined, the limit exists, and <span class='m'>lim<sub>x→a</sub> f(x) = f(a)</span>.",
+        "For the 0/0 form, try factoring, rationalizing with a conjugate, or a known limit such as <span class='m'>sin x / x → 1</span>.",
+        "Limits at infinity of rational functions: compare the degrees of the top and bottom.",
+        "<b>Intermediate Value Theorem:</b> if f is continuous on [a, b], f takes every value between f(a) and f(b)."],
+  example:{q:"Find lim<sub>x→2</sub> (x² − 4)/(x − 2).", steps:["Direct substitution gives 0/0, so more work is needed.","Factor the numerator: (x − 2)(x + 2)/(x − 2).","For x ≠ 2, cancel: the expression equals x + 2.","Substitute x = 2: the limit is 2 + 2 = 4."]},
+  why:{q:"Why can we cancel (x − 2) when it equals zero at x = 2?", a:"Because a limit never uses the value at x = 2 itself — only values near 2, where x − 2 ≠ 0. The original function and x + 2 agree everywhere except at the single point x = 2, so they have exactly the same limit. That's also why a hole in a graph never changes the limit."},
+  mistakes:[{bad:"Treating 0/0 as the answer 0, or as \"does not exist.\"", fix:"0/0 is indeterminate: it's a signal to simplify, not an answer."},
+            {bad:"Assuming the limit always equals f(a).", fix:"That's only true when f is continuous at a. A hole or a jump breaks it."}],
+  viz:"limit"
+},
+derivatives:{
+  intro:["The derivative f′(x) measures the instantaneous rate of change of f — the slope of the tangent line at x. It is defined as a limit of slopes:",
+         "<span class='m'>f′(x) = lim<sub>h→0</sub> [f(x + h) − f(x)] / h</span>. In practice you rarely use the definition; you use the rules below, which all come from it."],
+  keys:["<b>Power rule:</b> <span class='m'>d/dx xⁿ = n xⁿ⁻¹</span>. Constants multiply through; derivatives of sums are sums of derivatives.",
+        "<b>Product rule:</b> <span class='m'>(uv)′ = u′v + uv′</span>. <b>Quotient rule:</b> <span class='m'>(u/v)′ = (u′v − uv′)/v²</span>.",
+        "<b>Chain rule:</b> <span class='m'>d/dx f(g(x)) = f′(g(x)) · g′(x)</span> — derivative of the outside, times derivative of the inside.",
+        "Know these cold: <span class='m'>(sin x)′ = cos x, (cos x)′ = −sin x, (tan x)′ = sec² x, (eˣ)′ = eˣ, (ln x)′ = 1/x</span>.",
+        "<b>Implicit differentiation:</b> differentiate both sides with respect to x, attach dy/dx to every y-term, then solve for dy/dx.",
+        "<b>Inverse functions:</b> if g = f⁻¹, then <span class='m'>g′(a) = 1 / f′(g(a))</span>.",
+        "Differentiable implies continuous, but not the reverse: |x| is continuous at 0 with a corner, so it isn't differentiable there."],
+  example:{q:"Find d/dx [x³ sin x].", steps:["It's a product, so use the product rule with u = x³ and v = sin x.","u′ = 3x² and v′ = cos x.","(uv)′ = u′v + uv′ = 3x² sin x + x³ cos x."]},
+  why:{q:"Why does the derivative represent slope?", a:"Pick two points on the curve: (x, f(x)) and (x + h, f(x + h)). The slope of the secant line through them is rise over run, [f(x + h) − f(x)] / h. As h shrinks, the second point slides toward the first and the secant line pivots into the tangent line. The derivative is the limit of those slopes, so it is the tangent slope — the rate of change at a single instant."},
+  mistakes:[{bad:"Forgetting the chain rule: writing d/dx sin(3x) = cos(3x).", fix:"Multiply by the inside derivative: d/dx sin(3x) = 3 cos(3x)."},
+            {bad:"Writing (uv)′ = u′ · v′.", fix:"The product rule has two terms: u′v + uv′."},
+            {bad:"Flipping the order in the quotient rule.", fix:"The minus sign makes order matter: (u′v − uv′)/v². \"Low d-high minus high d-low, over low squared.\""}],
+  viz:"deriv"
+},
+applications:{
+  intro:["Derivatives describe motion, rates in context, and the shape of a graph. On the AP exam, this is where justification matters most: you must connect your conclusion to the sign of f′ or f″."],
+  keys:["<b>Critical points:</b> where f′(x) = 0 or f′ is undefined (and f is defined).",
+        "<b>First derivative test:</b> f′ changes + to − → relative max; − to + → relative min.",
+        "<b>Concavity:</b> f″ > 0 concave up, f″ < 0 concave down. An <b>inflection point</b> is where f″ changes sign.",
+        "<b>Second derivative test:</b> if f′(c) = 0 and f″(c) < 0 → relative max; f″(c) > 0 → relative min.",
+        "<b>Candidates test</b> (absolute extrema on [a, b]): compare f at critical points and at the endpoints.",
+        "<b>Mean Value Theorem:</b> if f is continuous on [a, b] and differentiable on (a, b), some c has <span class='m'>f′(c) = [f(b) − f(a)]/(b − a)</span>.",
+        "<b>Motion:</b> v = s′, a = v′. Speed increases when v and a have the same sign.",
+        "<b>Linear approximation:</b> <span class='m'>f(x) ≈ f(a) + f′(a)(x − a)</span>. <b>L'Hôpital's rule</b> for 0/0 or ∞/∞: <span class='m'>lim f/g = lim f′/g′</span>.",
+        "<b>Related rates:</b> write an equation relating the quantities, differentiate with respect to t, then substitute known values."],
+  example:{q:"Find and classify the relative extrema of f(x) = x³ − 3x².", steps:["f′(x) = 3x² − 6x = 3x(x − 2), so the critical points are x = 0 and x = 2.","Sign chart: f′ > 0 on (−∞, 0), f′ < 0 on (0, 2), f′ > 0 on (2, ∞).","At x = 0, f′ changes from positive to negative → relative maximum, f(0) = 0.","At x = 2, f′ changes from negative to positive → relative minimum, f(2) = −4.","AP-style justification: \"f has a relative maximum at x = 0 because f′ changes from positive to negative there.\""]},
+  why:{q:"Why does setting f′ = 0 find peaks and valleys?", a:"At the top of a smooth hill, the tangent line is horizontal — its slope is 0. But f′ = 0 only tells you the tangent is flat for a moment. The sign change of f′ is what proves the function actually turned around: rising, then falling is a peak. That's why the AP exam wants the sign change, not just f′ = 0."},
+  mistakes:[{bad:"Concluding a max or min just because f′(x) = 0.", fix:"f(x) = x³ has f′(0) = 0 but no extremum. Check that f′ changes sign."},
+            {bad:"Calling any point with f″(x) = 0 an inflection point.", fix:"f″ must change sign. f(x) = x⁴ has f″(0) = 0 and no inflection point."},
+            {bad:"Justifying with \"the graph goes up then down.\"", fix:"Refer to the derivative: \"because f′ changes from positive to negative at x = c.\""}],
+  viz:"deriv"
+},
+integrals:{
+  intro:["The definite integral adds up accumulated change — geometrically, signed area under a curve. It starts as a limit of Riemann sums, and the Fundamental Theorem of Calculus turns it into antiderivatives."],
+  keys:["<b>Riemann sums:</b> left, right, midpoint, and trapezoidal sums approximate <span class='m'>∫ₐᵇ f(x) dx</span>.",
+        "<b>Definite integral:</b> the limit of Riemann sums as the rectangle width → 0.",
+        "<b>FTC part 1:</b> <span class='m'>d/dx ∫ₐˣ f(t) dt = f(x)</span>. With an upper limit g(x), multiply by g′(x).",
+        "<b>FTC part 2:</b> <span class='m'>∫ₐᵇ f(x) dx = F(b) − F(a)</span> where F′ = f.",
+        "<b>Accumulation:</b> <span class='m'>F(b) = F(a) + ∫ₐᵇ F′(t) dt</span> — starting amount plus net change.",
+        "<b>u-substitution:</b> spot an inside function whose derivative also appears, let u = inside, and replace dx using du.",
+        "Properties: <span class='m'>∫ₐᵃ f = 0, ∫ₐᵇ f = −∫ᵦᵃ f, ∫ₐᵇ f + ∫ᵦᶜ f = ∫ₐᶜ f</span>.",
+        "<span class='badge'>BC</span> integration by parts <span class='m'>∫u dv = uv − ∫v du</span>, partial fractions, and improper integrals."],
+  example:{q:"Evaluate ∫₀² (3x² + 1) dx.", steps:["Find an antiderivative: F(x) = x³ + x.","Apply FTC: F(2) − F(0).","F(2) = 8 + 2 = 10 and F(0) = 0.","The integral is 10."]},
+  why:{q:"Why does the Fundamental Theorem connect derivatives and integrals?", a:"Let A(x) be the area under f from a to x. Nudge x by a small amount h: the new area is a thin strip about f(x) tall and h wide, so A(x + h) − A(x) ≈ f(x) · h. Divide by h and let h → 0: A′(x) = f(x). The area function is an antiderivative of f. So to find area, find any antiderivative and subtract — the two big ideas of calculus are inverses of each other."},
+  mistakes:[{bad:"Forgetting + C on indefinite integrals.", fix:"Every antiderivative family needs + C; AP graders deduct for it."},
+            {bad:"Changing to u but keeping the old x-limits.", fix:"Convert the limits to u-values, or switch back to x before evaluating."},
+            {bad:"Treating the integral as area when f dips below the axis.", fix:"The integral counts area below the axis as negative. Total area uses |f(x)|."}],
+  viz:"riemann"
+},
+diffeq:{
+  intro:["A differential equation relates a function to its derivatives. Its solutions are functions, not numbers. AP questions ask you to sketch slope fields, verify solutions, and solve by separating variables."],
+  keys:["<b>Verify a solution</b> by substituting y and its derivatives into the equation.",
+        "<b>Slope field:</b> at each point (x, y), draw a short segment with slope dy/dx.",
+        "<b>Separation of variables:</b> move all y's with dy and all x's with dx, integrate both sides, then use the initial condition to find C.",
+        "<b>Exponential model:</b> <span class='m'>dy/dt = ky ⟹ y = y₀eᵏᵗ</span>.",
+        "<span class='badge'>BC</span> <b>Euler's method:</b> <span class='m'>yₙ₊₁ = yₙ + Δx · f(xₙ, yₙ)</span>.",
+        "<span class='badge'>BC</span> <b>Logistic model:</b> <span class='m'>dP/dt = kP(1 − P/L)</span>; P → L, and P grows fastest when P = L/2."],
+  example:{q:"Solve dy/dx = xy with y(0) = 2.", steps:["Separate: dy/y = x dx.","Integrate: ln|y| = x²/2 + C.","Exponentiate: y = A e^(x²/2), where A = ±eᶜ.","Use y(0) = 2: A = 2, so y = 2e^(x²/2)."]},
+  why:{q:"Why does dy/dt = ky always give an exponential?", a:"The equation says the growth rate is proportional to the current amount — the more you have, the faster it grows. eᵏᵗ is exactly the function whose rate of change is a constant multiple of itself, which is why populations, interest, and radioactive decay all follow it."},
+  mistakes:[{bad:"Writing e^(x²/2 + C) = e^(x²/2) + C.", fix:"e^(x²/2 + C) = eᶜ · e^(x²/2) = A e^(x²/2). The constant multiplies."},
+            {bad:"Integrating before separating the variables.", fix:"You can't integrate y with respect to x while y is unknown. Separate first."}],
+  viz:null
+},
+appint:{
+  intro:["Integrals measure more than area under a curve: average value, net change, displacement, area between curves, and volume. The strategy is always the same — slice, approximate each slice, and add them with an integral."],
+  keys:["<b>Average value:</b> <span class='m'>f<sub>avg</sub> = (1/(b − a)) ∫ₐᵇ f(x) dx</span>.",
+        "<b>Displacement</b> = <span class='m'>∫ v(t) dt</span>; <b>total distance</b> = <span class='m'>∫ |v(t)| dt</span>.",
+        "<b>Area between curves:</b> <span class='m'>∫ (top − bottom) dx</span>, or <span class='m'>∫ (right − left) dy</span>.",
+        "<b>Cross sections:</b> <span class='m'>V = ∫ A(x) dx</span> where A(x) is the area of one slice (square: side², semicircle: πr²/2).",
+        "<b>Disc/washer:</b> <span class='m'>V = π ∫ (R² − r²) dx</span> — outer radius squared minus inner radius squared.",
+        "<span class='badge'>BC</span> <b>Arc length:</b> <span class='m'>∫ √(1 + (f′(x))²) dx</span>."],
+  example:{q:"Find the area between y = x and y = x² on [0, 1].", steps:["On [0, 1], x ≥ x², so y = x is on top.","Area = ∫₀¹ (x − x²) dx.","Antiderivative: x²/2 − x³/3.","Evaluate: 1/2 − 1/3 = 1/6."]},
+  why:{q:"Why integrate (top − bottom)?", a:"Slice the region into thin vertical strips of width dx. Each strip is almost a rectangle whose height is the gap between the curves, top − bottom. Adding infinitely many thin strips is exactly what an integral does — the same idea as Riemann rectangles, just measuring a gap instead of a height from the axis."},
+  mistakes:[{bad:"Using π(R − r)² for washers.", fix:"It's π(R² − r²): the area of the outer disc minus the area of the hole."},
+            {bad:"Using ∫v dt for total distance.", fix:"∫v dt is displacement. Distance needs ∫|v(t)| dt, splitting where v changes sign."}],
+  viz:"riemann"
+},
+parametric:{
+  intro:["In parametric equations, x and y are each functions of a third variable t (often time). The curve shows the path; t tells you where along it you are."],
+  keys:["<b>Slope:</b> <span class='m'>dy/dx = (dy/dt)/(dx/dt)</span>, provided dx/dt ≠ 0.",
+        "<b>Second derivative:</b> <span class='m'>d²y/dx² = [d/dt (dy/dx)] / (dx/dt)</span>.",
+        "Horizontal tangent: dy/dt = 0 and dx/dt ≠ 0. Vertical tangent: dx/dt = 0 and dy/dt ≠ 0.",
+        "<b>Arc length:</b> <span class='m'>∫ √((dx/dt)² + (dy/dt)²) dt</span>."],
+  example:{q:"For x = t², y = t³ − 3t, find where the tangent line is horizontal.", steps:["dy/dt = 3t² − 3 and dx/dt = 2t.","Horizontal tangent: 3t² − 3 = 0, so t = ±1 (where dx/dt = ±2 ≠ 0).","t = 1 gives (1, −2); t = −1 gives (1, 2)."]},
+  why:{q:"Why is dy/dx = (dy/dt)/(dx/dt)?", a:"By the chain rule, dy/dt = (dy/dx)(dx/dt): how fast y changes in time equals how steep the path is times how fast x changes. Solve for dy/dx and you get the ratio."},
+  mistakes:[{bad:"Finding d²y/dx² by differentiating dy/dx with respect to t and stopping.", fix:"Divide by dx/dt again: d²y/dx² = [d/dt(dy/dx)] / (dx/dt)."}],
+  viz:null
+},
+polar:{
+  intro:["A polar curve r = f(θ) places each point at distance r from the origin in direction θ. Converting with x = r cos θ and y = r sin θ links it back to familiar tools."],
+  keys:["Conversions: <span class='m'>x = r cos θ, y = r sin θ, r² = x² + y²</span>.",
+        "<b>Slope:</b> <span class='m'>dy/dx = (dy/dθ)/(dx/dθ)</span> using y = r sin θ and x = r cos θ.",
+        "<b>Area:</b> <span class='m'>A = ½ ∫ r² dθ</span>. Between curves: <span class='m'>½ ∫ (R² − r²) dθ</span>.",
+        "dr/dθ > 0 means the point is moving away from the origin."],
+  example:{q:"Find the area enclosed by r = 2 cos θ.", steps:["The curve traces a full circle once for 0 ≤ θ ≤ π.","A = ½ ∫₀^π (2 cos θ)² dθ = 2 ∫₀^π cos² θ dθ.","∫₀^π cos² θ dθ = π/2, so A = π.","Check: the curve is a circle of radius 1, area π. ✓"]},
+  why:{q:"Why is polar area ½ ∫ r² dθ instead of ∫ r dθ?", a:"Polar regions are built from thin wedges, not rectangles. A wedge with radius r and tiny angle dθ is a sector of a circle, whose area is ½ r² dθ. Adding the wedges gives the integral."},
+  mistakes:[{bad:"Using bounds that trace the curve twice (like 0 to 2π for r = 2 cos θ).", fix:"Find the θ-interval that traces the region exactly once."}],
+  viz:null
+},
+vectors:{
+  intro:["A vector-valued function r(t) = ⟨x(t), y(t)⟩ gives position in the plane. Differentiate each component for velocity and acceleration; integrate each component to recover position."],
+  keys:["<b>Velocity:</b> <span class='m'>v(t) = ⟨x′(t), y′(t)⟩</span>. <b>Acceleration:</b> <span class='m'>a(t) = ⟨x″(t), y″(t)⟩</span>.",
+        "<b>Speed:</b> <span class='m'>|v(t)| = √((x′)² + (y′)²)</span>.",
+        "<b>Position:</b> <span class='m'>r(b) = r(a) + ∫ₐᵇ v(t) dt</span>, component by component.",
+        "<b>Distance traveled:</b> <span class='m'>∫ₐᵇ |v(t)| dt</span>."],
+  example:{q:"v(t) = ⟨2t, 3⟩ and r(0) = ⟨1, 0⟩. Find r(2) and the speed at t = 2.", steps:["x(2) = 1 + ∫₀² 2t dt = 1 + 4 = 5.","y(2) = 0 + ∫₀² 3 dt = 6. So r(2) = ⟨5, 6⟩.","v(2) = ⟨4, 3⟩, speed = √(16 + 9) = 5."]},
+  why:{q:"Why can we handle each component separately?", a:"Horizontal and vertical motion are independent: how fast you move left–right doesn't change the rules for up–down. Each component is an ordinary function of t, so every single-variable tool applies to it on its own."},
+  mistakes:[{bad:"Adding the components to get speed.", fix:"Speed is the magnitude: √(x′² + y′²), not x′ + y′."}],
+  viz:null
+},
+series:{
+  intro:["An infinite series Σaₙ converges if its partial sums approach a finite number. Most AP series questions come down to choosing the right convergence test."],
+  keys:["<b>nth-term test:</b> if aₙ ↛ 0, the series diverges. If aₙ → 0, the test says nothing.",
+        "<b>Geometric:</b> <span class='m'>Σ arⁿ = a/(1 − r)</span> when |r| < 1; diverges otherwise.",
+        "<b>p-series:</b> <span class='m'>Σ 1/nᵖ</span> converges exactly when p > 1.",
+        "<b>Integral, comparison, and limit comparison tests</b> compare the series to something known.",
+        "<b>Alternating series test:</b> terms decrease in size to 0 → converges; error ≤ first omitted term.",
+        "<b>Ratio test:</b> <span class='m'>L = lim |aₙ₊₁/aₙ|</span>; L < 1 converges, L > 1 diverges, L = 1 inconclusive.",
+        "<b>Absolute vs. conditional:</b> converges absolutely if Σ|aₙ| converges; conditionally if only Σaₙ does."],
+  example:{q:"Does Σ (−1)ⁿ/n (from n = 1) converge absolutely, conditionally, or not at all?", steps:["The terms 1/n decrease and approach 0, so the series converges by the alternating series test.","Σ |(−1)ⁿ/n| = Σ 1/n is the harmonic series (p = 1), which diverges.","So the series converges conditionally."]},
+  why:{q:"How can infinitely many terms add to a finite number?", a:"Walk halfway to a wall, then half the remaining distance, then half again, forever: 1/2 + 1/4 + 1/8 + … You take infinitely many steps but never pass the wall — the total is exactly 1. Convergence happens when the terms shrink fast enough."},
+  mistakes:[{bad:"Concluding convergence because aₙ → 0.", fix:"The harmonic series Σ1/n has terms → 0 and still diverges."},
+            {bad:"Forgetting to test the endpoints of an interval of convergence.", fix:"The ratio test is inconclusive at the endpoints; check each one separately."}],
+  viz:null
+},
+taylor:{
+  intro:["A Taylor polynomial approximates a function near x = a by matching its value and derivatives there. A Maclaurin series is a Taylor series centered at 0."],
+  keys:["<span class='m'>Tₙ(x) = Σₖ f⁽ᵏ⁾(a)/k! · (x − a)ᵏ</span>.",
+        "Memorize: <span class='m'>eˣ = Σ xⁿ/n!</span>, <span class='m'>sin x = x − x³/3! + x⁵/5! − …</span>, <span class='m'>cos x = 1 − x²/2! + x⁴/4! − …</span>, <span class='m'>1/(1 − x) = Σ xⁿ (|x| < 1)</span>.",
+        "Build new series by substitution (replace x with 2x or x²), differentiation, or integration term by term.",
+        "<b>Interval of convergence:</b> use the ratio test, then check the endpoints.",
+        "<b>Lagrange error bound:</b> <span class='m'>|Rₙ(x)| ≤ M|x − a|ⁿ⁺¹ / (n + 1)!</span> where M bounds |f⁽ⁿ⁺¹⁾|.",
+        "<b>Alternating series error bound</b> applies when the series alternates: error ≤ first omitted term."],
+  example:{q:"Find the Maclaurin polynomial of degree 3 for e^(2x).", steps:["Start from eˣ = 1 + x + x²/2! + x³/3! + …","Substitute 2x for x: 1 + 2x + (2x)²/2 + (2x)³/6.","Simplify: 1 + 2x + 2x² + (4/3)x³."]},
+  why:{q:"Why do the coefficients have k! in them?", a:"A Taylor polynomial is built so its derivatives at a match f's: the height, then the slope, then the bend, and so on. Differentiating (x − a)ᵏ k times produces k!, so dividing by k! cancels it and leaves exactly f⁽ᵏ⁾(a). Each extra term makes the polynomial hug the curve over a wider stretch."},
+  mistakes:[{bad:"Forgetting the factorials in the coefficients.", fix:"The coefficient of (x − a)ᵏ is f⁽ᵏ⁾(a) / k!, not f⁽ᵏ⁾(a)."},
+            {bad:"Using the Lagrange bound with the wrong derivative.", fix:"For Tₙ, bound the (n + 1)th derivative."}],
+  viz:null
+}
+};
+
+const EXAM_MISTAKES = [
+  {bad:"Rounding intermediate answers.", fix:"Store full values in the calculator; give final answers correct to three decimal places."},
+  {bad:"Leaving the calculator in degree mode.", fix:"AP Calculus uses radians. Check the mode before the calculator section."},
+  {bad:"Answering without units in context problems.", fix:"Include units (e.g. gallons per hour) whenever the question gives them."},
+  {bad:"Writing an answer with no supporting work.", fix:"On FRQs, an unsupported answer usually earns no points. Show the setup, like the integral you evaluated."},
+  {bad:"Using \"it\" in justifications.", fix:"Name the function: \"f′ changes sign\" — never \"it changes sign.\""},
+];
+
+/* ===== Multiple choice bank: t=topic, l=1 easy/2 medium/3 hard ===== */
+const BANK = [
+/* Limits */
+{t:"limits",l:1,q:"lim<sub>x→2</sub> (3x + 1) = ?",o:["5","6","7","Does not exist"],a:2,e:"Polynomials are continuous, so substitute directly.",s:["3x + 1 is a polynomial, which is continuous everywhere.","Substitute x = 2: 3(2) + 1 = 7."],c:"For continuous functions, the limit equals the function value."},
+{t:"limits",l:1,q:"lim<sub>x→3</sub> (x² − 9)/(x − 3) = ?",o:["0","3","6","Does not exist"],a:2,e:"Factor and cancel the common factor to remove the 0/0 form.",s:["Direct substitution gives 0/0.","Factor: (x − 3)(x + 3)/(x − 3).","Cancel for x ≠ 3: x + 3.","Substitute: 3 + 3 = 6."],c:"A removable discontinuity (hole) doesn't change the limit."},
+{t:"limits",l:1,q:"lim<sub>x→∞</sub> (4x² + 1)/(2x² − x) = ?",o:["0","2","4","∞"],a:1,e:"The degrees match, so the limit is the ratio of leading coefficients.",s:["Top and bottom are both degree 2.","Divide every term by x²: (4 + 1/x²)/(2 − 1/x).","As x → ∞, the small terms → 0, leaving 4/2 = 2."],c:"Limits at infinity of rational functions (horizontal asymptotes)."},
+{t:"limits",l:2,q:"lim<sub>x→0</sub> sin(3x)/x = ?",o:["0","1","3","1/3"],a:2,e:"Rewrite to match the known limit sin θ / θ → 1.",s:["Multiply and divide by 3: 3 · sin(3x)/(3x).","Let θ = 3x; as x → 0, θ → 0.","sin θ / θ → 1, so the limit is 3 · 1 = 3."],c:"The special limit lim sin θ / θ = 1."},
+{t:"limits",l:2,q:"f(x) = x + 2 for x &lt; 1 and f(x) = 3x for x ≥ 1. Is f continuous at x = 1?",o:["Yes","No, the one-sided limits differ","No, f(1) is undefined","No, the limit is infinite"],a:0,e:"All three parts of the continuity definition hold.",s:["Left limit: 1 + 2 = 3.","Right limit: 3(1) = 3, so the limit exists and equals 3.","f(1) = 3(1) = 3.","The limit equals f(1), so f is continuous at 1."],c:"The three-part definition of continuity."},
+{t:"limits",l:2,q:"lim<sub>x→4</sub> (√x − 2)/(x − 4) = ?",o:["0","1/4","1/2","Does not exist"],a:1,e:"Rationalize, or factor x − 4 as (√x − 2)(√x + 2).",s:["Direct substitution gives 0/0.","Write x − 4 = (√x − 2)(√x + 2).","Cancel: 1/(√x + 2).","Substitute x = 4: 1/(2 + 2) = 1/4."],c:"Rationalizing / conjugates to resolve 0/0."},
+{t:"limits",l:3,q:"f(x) = kx + 1 for x &lt; 2 and f(x) = x² − k for x ≥ 2. For what k is f continuous?",o:["k = 0","k = 1","k = 3/2","k = 3"],a:1,e:"Set the left and right limits at x = 2 equal.",s:["Left limit at 2: 2k + 1.","Right limit (and f(2)): 4 − k.","Set equal: 2k + 1 = 4 − k, so 3k = 3.","k = 1."],c:"Making a piecewise function continuous."},
+{t:"limits",l:3,q:"lim<sub>x→0</sub> (1 − cos x)/x² = ?",o:["0","1/2","1","Does not exist"],a:1,e:"Use L'Hôpital twice, or multiply by (1 + cos x).",s:["0/0 form, so apply L'Hôpital: sin x / (2x).","Still 0/0; apply again: cos x / 2.","Substitute x = 0: 1/2."],c:"L'Hôpital's rule applied repeatedly."},
+{t:"limits",l:3,q:"lim<sub>x→∞</sub> (√(x² + 3x) − x) = ?",o:["0","3/2","3","∞"],a:1,e:"∞ − ∞ is indeterminate; multiply by the conjugate.",s:["Multiply by (√(x² + 3x) + x)/(√(x² + 3x) + x).","Numerator: x² + 3x − x² = 3x.","Result: 3x / (√(x² + 3x) + x). Divide top and bottom by x: 3 / (√(1 + 3/x) + 1).","As x → ∞: 3 / (1 + 1) = 3/2."],c:"The ∞ − ∞ indeterminate form."},
+/* Derivatives */
+{t:"derivatives",l:1,q:"d/dx [x³ − 5x + 2] = ?",o:["3x² − 5","3x² − 5x","x² − 5","3x² + 2"],a:0,e:"Apply the power rule term by term.",s:["d/dx x³ = 3x².","d/dx (−5x) = −5.","d/dx 2 = 0.","Total: 3x² − 5."],c:"Power rule and sum rule."},
+{t:"derivatives",l:1,q:"If f(x) = √x, what is f′(4)?",o:["1/2","1/4","2","1/8"],a:1,e:"Write √x = x^(1/2) and use the power rule.",s:["f(x) = x^(1/2), so f′(x) = (1/2)x^(−1/2) = 1/(2√x).","f′(4) = 1/(2 · 2) = 1/4."],c:"Power rule with fractional exponents."},
+{t:"derivatives",l:1,q:"d/dx [5eˣ] = ?",o:["5eˣ","eˣ","5xeˣ⁻¹","5"],a:0,e:"eˣ is its own derivative; the constant 5 stays.",s:["Constant multiple rule: 5 · d/dx eˣ.","d/dx eˣ = eˣ, so the answer is 5eˣ."],c:"The exponential function is its own derivative."},
+{t:"derivatives",l:2,q:"d/dx [x² sin x] = ?",o:["2x cos x","2x sin x + x² cos x","2x sin x − x² cos x","x² cos x"],a:1,e:"It's a product: use u′v + uv′.",s:["u = x², v = sin x; u′ = 2x, v′ = cos x.","u′v + uv′ = 2x sin x + x² cos x."],c:"Product rule."},
+{t:"derivatives",l:2,q:"d/dx [sin(x²)] = ?",o:["cos(x²)","2x cos(x²)","2x sin(x²)","cos(2x)"],a:1,e:"Outside derivative times inside derivative.",s:["Outside: sin(u) → cos(u), keeping u = x².","Inside: d/dx x² = 2x.","Multiply: 2x cos(x²)."],c:"Chain rule."},
+{t:"derivatives",l:2,q:"If x² + y² = 25, then dy/dx = ?",o:["−x/y","x/y","−y/x","2x + 2y"],a:0,e:"Differentiate implicitly and solve for dy/dx.",s:["d/dx: 2x + 2y · dy/dx = 0.","Solve: dy/dx = −2x/(2y) = −x/y."],c:"Implicit differentiation."},
+{t:"derivatives",l:3,q:"d/dx [x/(x² + 1)] = ?",o:["1/(2x)","(1 − x²)/(x² + 1)²","(x² − 1)/(x² + 1)²","(1 + x²)/(x² + 1)²"],a:1,e:"Quotient rule: (u′v − uv′)/v².",s:["u = x, v = x² + 1; u′ = 1, v′ = 2x.","u′v − uv′ = (x² + 1) − x(2x) = 1 − x².","Divide by v²: (1 − x²)/(x² + 1)²."],c:"Quotient rule."},
+{t:"derivatives",l:3,q:"f(x) = x³ + x and g is the inverse of f. What is g′(2)?",o:["1/13","1/4","4","13"],a:1,e:"g′(a) = 1/f′(g(a)). First find g(2).",s:["Find g(2): solve x³ + x = 2, so x = 1. Thus g(2) = 1.","f′(x) = 3x² + 1, so f′(1) = 4.","g′(2) = 1/f′(1) = 1/4."],c:"Derivative of an inverse function."},
+{t:"derivatives",l:3,q:"If xy + y² = 6, what is dy/dx at the point (1, 2)?",o:["−2/5","−2/3","2/5","−1/2"],a:0,e:"Implicit differentiation, with the product rule on xy.",s:["d/dx: (y + x·dy/dx) + 2y·dy/dx = 0.","Substitute (1, 2): 2 + dy/dx + 4·dy/dx = 0.","5·dy/dx = −2, so dy/dx = −2/5."],c:"Implicit differentiation with the product rule."},
+/* Integrals */
+{t:"integrals",l:1,q:"∫ (3x² + 2) dx = ?",o:["6x + C","x³ + 2x + C","x³ + 2 + C","3x³ + 2x + C"],a:1,e:"Reverse the power rule term by term.",s:["∫3x² dx = 3 · x³/3 = x³.","∫2 dx = 2x.","Add the constant: x³ + 2x + C."],c:"Antiderivatives (reverse power rule)."},
+{t:"integrals",l:1,q:"∫₀² x dx = ?",o:["1","2","4","8"],a:1,e:"Use FTC, or the area of a triangle.",s:["Antiderivative: x²/2.","Evaluate: 2²/2 − 0 = 2.","Check: a triangle with base 2 and height 2 has area 2."],c:"Fundamental Theorem of Calculus, part 2."},
+{t:"integrals",l:1,q:"∫ cos x dx = ?",o:["−sin x + C","sin x + C","cos x + C","−cos x + C"],a:1,e:"Which function has derivative cos x?",s:["d/dx sin x = cos x.","So ∫cos x dx = sin x + C."],c:"Basic trig antiderivatives."},
+{t:"integrals",l:2,q:"∫ 2x cos(x²) dx = ?",o:["sin(x²) + C","x² sin(x²) + C","cos(x²) + C","2 sin(x²) + C"],a:0,e:"The derivative of the inside, 2x, is already there: u-substitution.",s:["Let u = x², so du = 2x dx.","The integral becomes ∫cos u du = sin u + C.","Substitute back: sin(x²) + C."],c:"u-substitution."},
+{t:"integrals",l:2,q:"d/dx ∫<sub>0</sub><sup>x²</sup> cos t dt = ?",o:["cos(x²)","2x cos(x²)","sin(x²)","−2x sin(x²)"],a:1,e:"FTC part 1 with a chain rule factor.",s:["FTC 1: plug the upper limit into the integrand: cos(x²).","Multiply by the derivative of the upper limit, 2x.","Result: 2x cos(x²)."],c:"FTC part 1 with a function as the upper limit."},
+{t:"integrals",l:2,q:"∫<sub>1</sub><sup>e</sup> (1/x) dx = ?",o:["0","1","e","1/e"],a:1,e:"The antiderivative of 1/x is ln|x|.",s:["Antiderivative: ln|x|.","ln e − ln 1 = 1 − 0 = 1."],c:"The natural log as the antiderivative of 1/x."},
+{t:"integrals",l:3,q:"∫₀¹ x e^(x²) dx = ?",o:["e − 1","(e − 1)/2","e/2","2(e − 1)"],a:1,e:"u = x² turns x dx into du/2; change the limits too.",s:["Let u = x², du = 2x dx, so x dx = du/2.","Limits: x = 0 → u = 0; x = 1 → u = 1.","(1/2)∫₀¹ eᵘ du = (1/2)(e − 1)."],c:"u-substitution with definite integrals."},
+{t:"integrals",l:3,q:"∫₀³ |x − 1| dx = ?",o:["3/2","2","5/2","3"],a:2,e:"Split where x − 1 changes sign, or use triangle areas.",s:["|x − 1| is 1 − x on [0, 1] and x − 1 on [1, 3].","On [0, 1]: a triangle with base 1, height 1 → 1/2.","On [1, 3]: a triangle with base 2, height 2 → 2.","Total: 1/2 + 2 = 5/2."],c:"Integrals of absolute value functions."},
+{t:"integrals",l:3,q:"∫₀⁵ f(x) dx = 10 and ∫₀² f(x) dx = 4. What is ∫₂⁵ (2f(x) + 1) dx?",o:["12","13","15","21"],a:2,e:"Split the interval, then use linearity.",s:["∫₂⁵ f = ∫₀⁵ f − ∫₀² f = 10 − 4 = 6.","∫₂⁵ 2f = 12 and ∫₂⁵ 1 dx = 3.","Total: 12 + 3 = 15."],c:"Properties of definite integrals."},
+/* Applications of differentiation */
+{t:"applications",l:1,q:"A particle's position is s(t) = t³ − 6t². What is its velocity at t = 2?",o:["−16","−12","0","12"],a:1,e:"Velocity is the derivative of position.",s:["v(t) = s′(t) = 3t² − 12t.","v(2) = 12 − 24 = −12."],c:"Motion: v = s′."},
+{t:"applications",l:2,q:"Where are the critical points of f(x) = x³ − 3x?",o:["x = 0 only","x = ±1","x = ±√3","x = 3"],a:1,e:"Set f′(x) = 0.",s:["f′(x) = 3x² − 3 = 3(x − 1)(x + 1).","f′ = 0 at x = −1 and x = 1."],c:"Critical points."},
+{t:"applications",l:2,q:"For f(x) = x² on [1, 3], what value c satisfies the Mean Value Theorem?",o:["c = 1.5","c = 2","c = 2.5","c = 4"],a:1,e:"Set f′(c) equal to the average rate of change.",s:["Average rate of change: (9 − 1)/(3 − 1) = 4.","f′(c) = 2c = 4, so c = 2."],c:"Mean Value Theorem."},
+{t:"applications",l:2,q:"Using the tangent line to y = √x at x = 9, estimate √9.2.",o:["3.02","3.033","3.1","3.2"],a:1,e:"Linear approximation: f(a) + f′(a)(x − a).",s:["f(9) = 3 and f′(9) = 1/(2·3) = 1/6.","L(9.2) = 3 + (1/6)(0.2) ≈ 3.033."],c:"Local linear approximation."},
+{t:"applications",l:3,q:"lim<sub>x→0</sub> (eˣ − 1 − x)/x² = ?",o:["0","1/2","1","∞"],a:1,e:"0/0 — apply L'Hôpital's rule twice.",s:["First: (eˣ − 1)/(2x), still 0/0.","Second: eˣ/2.","At x = 0: 1/2."],c:"L'Hôpital's rule."},
+{t:"applications",l:3,q:"If f″(x) = 6x − 12, where does f have a point of inflection?",o:["x = 0","x = 2","x = 6","x = −2"],a:1,e:"Find where f″ changes sign.",s:["f″(x) = 0 at x = 2.","f″ < 0 for x < 2 and f″ > 0 for x > 2, so it changes sign.","Inflection point at x = 2."],c:"Concavity and inflection points."},
+/* Differential equations */
+{t:"diffeq",l:2,q:"Solve dy/dx = 2y with y(0) = 3.",o:["y = 3e²ˣ","y = e²ˣ + 3","y = 3 + 2x","y = 2e³ˣ"],a:0,e:"Separate variables, then apply the initial condition.",s:["dy/y = 2 dx.","ln|y| = 2x + C, so y = Ae²ˣ.","y(0) = 3 gives A = 3."],c:"Separation of variables."},
+{t:"diffeq",l:1,q:"On the slope field for dy/dx = x − y, what is the slope at (2, 1)?",o:["−1","1","2","3"],a:1,e:"Substitute the point into dy/dx.",s:["dy/dx = 2 − 1 = 1."],c:"Slope fields."},
+/* Applications of integration */
+{t:"appint",l:1,q:"What is the average value of f(x) = x² on [0, 3]?",o:["3","4.5","9","1"],a:0,e:"Average value = (1/(b − a)) ∫ f.",s:["∫₀³ x² dx = 9.","Divide by 3 − 0: 9/3 = 3."],c:"Average value of a function."},
+{t:"appint",l:2,q:"Area between y = x and y = x² from x = 0 to x = 1?",o:["1/2","1/3","1/6","1"],a:2,e:"Integrate top minus bottom.",s:["On [0, 1], x ≥ x².","∫₀¹ (x − x²) dx = 1/2 − 1/3 = 1/6."],c:"Area between curves."},
+{t:"appint",l:3,q:"Volume when y = √x on [0, 4] is revolved around the x-axis?",o:["4π","8π","16π","2π"],a:1,e:"Disc method: π∫R² dx.",s:["R(x) = √x, so R² = x.","V = π∫₀⁴ x dx = π · 8 = 8π."],c:"Disc method."},
+/* BC */
+{t:"parametric",l:2,q:"If x = t² and y = t³, what is dy/dx at t = 2?",o:["3","6","12","3/4"],a:0,e:"dy/dx = (dy/dt)/(dx/dt).",s:["dy/dt = 3t², dx/dt = 2t.","dy/dx = 3t²/(2t) = 3t/2.","At t = 2: 3."],c:"Parametric derivatives."},
+{t:"polar",l:2,q:"Which integral gives the area inside r = 2 cos θ?",o:["∫₀^π 2cos θ dθ","½∫₀^π 4cos² θ dθ","½∫₀^2π 4cos² θ dθ","∫₀^π 4cos² θ dθ"],a:1,e:"Polar area is ½∫r² dθ over one trace of the curve.",s:["r = 2cos θ traces the circle once on [0, π].","A = ½∫₀^π (2cos θ)² dθ = ½∫₀^π 4cos² θ dθ."],c:"Polar area."},
+{t:"vectors",l:1,q:"A particle has velocity ⟨3, 4⟩ at some moment. What is its speed?",o:["5","7","1","25"],a:0,e:"Speed is the magnitude of the velocity vector.",s:["√(3² + 4²) = √25 = 5."],c:"Speed of a vector-valued function."},
+{t:"series",l:1,q:"Σ<sub>n=0</sub><sup>∞</sup> (1/2)ⁿ = ?",o:["1","2","1/2","Diverges"],a:1,e:"Geometric series with |r| < 1.",s:["First term a = 1, ratio r = 1/2.","Sum = a/(1 − r) = 1/(1/2) = 2."],c:"Geometric series."},
+{t:"series",l:2,q:"The p-series Σ 1/nᵖ converges when…",o:["p > 0","p ≥ 1","p > 1","p < 1"],a:2,e:"The boundary case p = 1 is the harmonic series.",s:["Σ1/nᵖ converges exactly when p > 1.","At p = 1 it's the harmonic series, which diverges."],c:"p-series."},
+{t:"taylor",l:1,q:"The first four nonzero terms of the Maclaurin series for eˣ are…",o:["1 + x + x² + x³","1 + x + x²/2 + x³/6","x + x²/2 + x³/3 + x⁴/4","1 − x + x²/2 − x³/6"],a:1,e:"eˣ = Σ xⁿ/n!.",s:["Every derivative of eˣ at 0 equals 1.","Coefficients are 1/n!: 1, 1, 1/2, 1/6."],c:"Maclaurin series for eˣ."},
+{t:"taylor",l:3,q:"The Maclaurin series for sin x is used to approximate sin(0.1) with x − x³/6. The alternating series error bound is at most…",o:["0.1⁴/24","0.1⁵/120","0.1³/6","0.1⁵/24"],a:1,e:"The error is at most the first omitted term.",s:["sin x = x − x³/3! + x⁵/5! − …","The first omitted term is x⁵/5! = 0.1⁵/120."],c:"Alternating series error bound."},
+];
+
+/* ===== Free-response questions ===== */
+const FRQS = [
+{id:"f1", title:"Analyzing a cubic", calc:false, minutes:15, topic:"applications",
+ stem:"Let f be the function defined by f(x) = x³ − 6x² + 9x + 1.",
+ parts:[
+  {p:"a", q:"Find the intervals on which f is increasing. Justify your answer.", pts:2,
+   sol:["f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3).","f′(x) > 0 for x < 1 and for x > 3.","f is increasing on (−∞, 1) and (3, ∞) because f′(x) > 0 there."],
+   rub:["1 point: f′(x) = 3x² − 12x + 9","1 point: intervals with justification using the sign of f′"]},
+  {p:"b", q:"Find the x-coordinate of each relative extremum of f. Classify each and justify.", pts:2,
+   sol:["Critical points: x = 1 and x = 3.","At x = 1, f′ changes from positive to negative, so f has a relative maximum.","At x = 3, f′ changes from negative to positive, so f has a relative minimum."],
+   rub:["1 point: relative maximum at x = 1 with justification","1 point: relative minimum at x = 3 with justification"]},
+  {p:"c", q:"On what interval is the graph of f concave down? Justify.", pts:2,
+   sol:["f″(x) = 6x − 12.","f″(x) < 0 when x < 2.","The graph is concave down on (−∞, 2) because f″(x) < 0 there."],
+   rub:["1 point: f″(x) = 6x − 12","1 point: interval with justification"]},
+  {p:"d", q:"Find the absolute maximum value of f on the closed interval [0, 4]. Justify.", pts:3,
+   sol:["Candidates: endpoints x = 0, 4 and critical points x = 1, 3.","f(0) = 1, f(1) = 5, f(3) = 1, f(4) = 64 − 96 + 36 + 1 = 5.","The absolute maximum value is 5, reached at x = 1 and x = 4."],
+   rub:["1 point: considers the endpoints and critical points (candidates test)","1 point: correct function values","1 point: answer of 5"]}
+ ]},
+{id:"f2", title:"Particle motion", calc:false, minutes:15, topic:"applications",
+ stem:"A particle moves along the x-axis. Its velocity is v(t) = t² − 4t + 3 for 0 ≤ t ≤ 5, and its position at t = 0 is x(0) = 2.",
+ parts:[
+  {p:"a", q:"At what times t is the particle at rest?", pts:2,
+   sol:["At rest when v(t) = 0: t² − 4t + 3 = (t − 1)(t − 3) = 0.","t = 1 and t = 3."],
+   rub:["1 point: sets v(t) = 0","1 point: t = 1 and t = 3"]},
+  {p:"b", q:"Is the speed of the particle increasing or decreasing at t = 2.5? Give a reason.", pts:2,
+   sol:["v(2.5) = 6.25 − 10 + 3 = −0.75.","a(t) = v′(t) = 2t − 4, so a(2.5) = 1.","v and a have opposite signs, so the speed is decreasing."],
+   rub:["1 point: v(2.5) and a(2.5)","1 point: decreasing, with the reason that v and a have opposite signs"]},
+  {p:"c", q:"Find the position of the particle at t = 3.", pts:2,
+   sol:["x(3) = x(0) + ∫₀³ v(t) dt.","∫₀³ (t² − 4t + 3) dt = [t³/3 − 2t² + 3t]₀³ = 9 − 18 + 9 = 0.","x(3) = 2 + 0 = 2."],
+   rub:["1 point: x(0) + ∫₀³ v(t) dt","1 point: answer x(3) = 2"]},
+  {p:"d", q:"Find the total distance traveled by the particle from t = 0 to t = 3.", pts:3,
+   sol:["v changes sign at t = 1, so split the integral.","∫₀¹ v dt = 1/3 − 2 + 3 = 4/3.","∫₁³ v dt = 0 − 4/3 = −4/3.","Total distance = |4/3| + |−4/3| = 8/3."],
+   rub:["1 point: uses |v(t)| or splits at t = 1","1 point: correct values of the pieces","1 point: answer 8/3"]}
+ ]},
+{id:"f3", title:"Water in a tank", calc:true, minutes:15, topic:"integrals",
+ stem:"Water flows into a tank at a rate R(t) = 20 + 10 sin(t/2) gallons per hour and leaks out at a rate D(t) = 2t + 10 gallons per hour, for 0 ≤ t ≤ 8. At t = 0 the tank holds 100 gallons.",
+ parts:[
+  {p:"a", q:"How many gallons of water flow into the tank from t = 0 to t = 8?", pts:2,
+   sol:["∫₀⁸ R(t) dt ≈ 193.073 gallons."],
+   rub:["1 point: integral ∫₀⁸ R(t) dt","1 point: answer 193.073 (to three decimal places)"]},
+  {p:"b", q:"Is the amount of water in the tank increasing or decreasing at t = 6? Explain.", pts:2,
+   sol:["R(6) − D(6) = 20 + 10 sin 3 − 22 ≈ −0.589.","Since R(6) − D(6) < 0, the amount of water is decreasing at t = 6."],
+   rub:["1 point: considers R(6) − D(6)","1 point: decreasing, with reason"]},
+  {p:"c", q:"How many gallons of water are in the tank at t = 8?", pts:2,
+   sol:["100 + ∫₀⁸ (R(t) − D(t)) dt ≈ 100 + 193.073 − 144 = 149.073 gallons."],
+   rub:["1 point: 100 + ∫₀⁸ (R(t) − D(t)) dt","1 point: answer 149.073"]},
+  {p:"d", q:"At what time t, 0 ≤ t ≤ 8, is the amount of water in the tank greatest? Justify.", pts:3,
+   sol:["The amount A(t) has A′(t) = R(t) − D(t) = 0 at t ≈ 5.915.","A′ > 0 before 5.915 and A′ < 0 after, so this is where A stops increasing.","Candidates: A(0) = 100, A(5.915) ≈ 163.825, A(8) ≈ 149.073.","The amount is greatest at t ≈ 5.915 hours."],
+   rub:["1 point: sets R(t) − D(t) = 0","1 point: compares values at the critical point and endpoints","1 point: answer t ≈ 5.915 with justification"]}
+ ]},
+{id:"f4", title:"Region and volume", calc:true, minutes:15, topic:"appint",
+ stem:"Let R be the region in the first quadrant bounded by the graphs of y = √x and y = x/2.",
+ parts:[
+  {p:"a", q:"Find the area of R.", pts:2,
+   sol:["The curves intersect where √x = x/2: x = 0 and x = 4.","Area = ∫₀⁴ (√x − x/2) dx = 16/3 − 4 = 4/3 ≈ 1.333."],
+   rub:["1 point: integral with correct limits and integrand","1 point: answer 4/3 ≈ 1.333"]},
+  {p:"b", q:"Find the volume of the solid generated when R is revolved about the x-axis.", pts:3,
+   sol:["Washers: outer radius √x, inner radius x/2.","V = π∫₀⁴ (x − x²/4) dx = π(8 − 16/3) = 8π/3 ≈ 8.378."],
+   rub:["1 point: constant π and limits","1 point: integrand R² − r²","1 point: answer 8π/3 ≈ 8.378"]},
+  {p:"c", q:"R is the base of a solid whose cross sections perpendicular to the x-axis are squares. Find its volume.", pts:2,
+   sol:["Side length √x − x/2, so area (√x − x/2)².","V = ∫₀⁴ (√x − x/2)² dx = 8/15 ≈ 0.533."],
+   rub:["1 point: integral of (√x − x/2)²","1 point: answer ≈ 0.533"]},
+  {p:"d", q:"The vertical line x = k divides R into two regions of equal area. Write, but do not solve, an equation for k.", pts:2,
+   sol:["∫₀ᵏ (√x − x/2) dx = ½ · 4/3 = 2/3.","(Equivalently ∫₀ᵏ (√x − x/2) dx = ∫ₖ⁴ (√x − x/2) dx.) Solving gives k ≈ 1.509."],
+   rub:["1 point: integral from 0 to k","1 point: set equal to half the area (2/3)"]}
+ ]}
+];
+
+/* ===== Formula sheet ===== */
+const FORMULAS = [
+ {g:"Limits",n:"Special trig limit",f:"lim<sub>x→0</sub> sin x / x = 1"},
+ {g:"Limits",n:"Another trig limit",f:"lim<sub>x→0</sub> (1 − cos x)/x = 0"},
+ {g:"Limits",n:"Definition of e",f:"lim<sub>n→∞</sub> (1 + 1/n)ⁿ = e"},
+ {g:"Limits",n:"L'Hôpital's rule (0/0 or ∞/∞)",f:"lim f(x)/g(x) = lim f′(x)/g′(x)"},
+ {g:"Derivative rules",n:"Definition of the derivative",f:"f′(x) = lim<sub>h→0</sub> [f(x + h) − f(x)]/h"},
+ {g:"Derivative rules",n:"Power rule",f:"d/dx xⁿ = n xⁿ⁻¹"},
+ {g:"Derivative rules",n:"Product rule",f:"(uv)′ = u′v + uv′"},
+ {g:"Derivative rules",n:"Quotient rule",f:"(u/v)′ = (u′v − uv′)/v²"},
+ {g:"Derivative rules",n:"Chain rule",f:"d/dx f(g(x)) = f′(g(x)) · g′(x)"},
+ {g:"Derivative rules",n:"Inverse function derivative",f:"(f⁻¹)′(a) = 1 / f′(f⁻¹(a))"},
+ {g:"Common derivatives",n:"Sine",f:"d/dx sin x = cos x"},
+ {g:"Common derivatives",n:"Cosine",f:"d/dx cos x = −sin x"},
+ {g:"Common derivatives",n:"Tangent",f:"d/dx tan x = sec² x"},
+ {g:"Common derivatives",n:"Cotangent",f:"d/dx cot x = −csc² x"},
+ {g:"Common derivatives",n:"Secant",f:"d/dx sec x = sec x tan x"},
+ {g:"Common derivatives",n:"Cosecant",f:"d/dx csc x = −csc x cot x"},
+ {g:"Common derivatives",n:"Exponential",f:"d/dx eˣ = eˣ,   d/dx aˣ = aˣ ln a"},
+ {g:"Common derivatives",n:"Logarithm",f:"d/dx ln x = 1/x,   d/dx logₐ x = 1/(x ln a)"},
+ {g:"Common derivatives",n:"Inverse sine",f:"d/dx arcsin x = 1/√(1 − x²)"},
+ {g:"Common derivatives",n:"Inverse tangent",f:"d/dx arctan x = 1/(1 + x²)"},
+ {g:"Integral rules",n:"Power rule (n ≠ −1)",f:"∫ xⁿ dx = xⁿ⁺¹/(n + 1) + C"},
+ {g:"Integral rules",n:"u-substitution",f:"∫ f(g(x)) g′(x) dx = ∫ f(u) du"},
+ {g:"Integral rules",n:"Integration by parts (BC)",f:"∫ u dv = uv − ∫ v du"},
+ {g:"Integral rules",n:"Reversing limits",f:"∫ₐᵇ f(x) dx = −∫ᵦᵃ f(x) dx"},
+ {g:"Integral rules",n:"Adding intervals",f:"∫ₐᵇ f + ∫ᵦᶜ f = ∫ₐᶜ f"},
+ {g:"Common integrals",n:"Reciprocal",f:"∫ 1/x dx = ln|x| + C"},
+ {g:"Common integrals",n:"Exponential",f:"∫ eˣ dx = eˣ + C,   ∫ aˣ dx = aˣ/ln a + C"},
+ {g:"Common integrals",n:"Sine and cosine",f:"∫ sin x dx = −cos x + C,   ∫ cos x dx = sin x + C"},
+ {g:"Common integrals",n:"Secant squared",f:"∫ sec² x dx = tan x + C"},
+ {g:"Common integrals",n:"Secant tangent",f:"∫ sec x tan x dx = sec x + C"},
+ {g:"Common integrals",n:"Tangent",f:"∫ tan x dx = −ln|cos x| + C"},
+ {g:"Common integrals",n:"Inverse tangent form",f:"∫ 1/(1 + x²) dx = arctan x + C"},
+ {g:"Common integrals",n:"Inverse sine form",f:"∫ 1/√(1 − x²) dx = arcsin x + C"},
+ {g:"Trig identities",n:"Pythagorean",f:"sin² x + cos² x = 1,   1 + tan² x = sec² x"},
+ {g:"Trig identities",n:"Double angle (sine)",f:"sin 2x = 2 sin x cos x"},
+ {g:"Trig identities",n:"Double angle (cosine)",f:"cos 2x = cos² x − sin² x = 2cos² x − 1 = 1 − 2sin² x"},
+ {g:"Trig identities",n:"Power reduction",f:"cos² x = (1 + cos 2x)/2,   sin² x = (1 − cos 2x)/2"},
+ {g:"Fundamental Theorem",n:"FTC part 1",f:"d/dx ∫ₐˣ f(t) dt = f(x)"},
+ {g:"Fundamental Theorem",n:"FTC part 1 with chain rule",f:"d/dx ∫ₐ^g(x) f(t) dt = f(g(x)) · g′(x)"},
+ {g:"Fundamental Theorem",n:"FTC part 2",f:"∫ₐᵇ f(x) dx = F(b) − F(a), where F′ = f"},
+ {g:"Fundamental Theorem",n:"Net change / accumulation",f:"F(b) = F(a) + ∫ₐᵇ F′(t) dt"},
+ {g:"Applications",n:"Mean Value Theorem",f:"f′(c) = [f(b) − f(a)]/(b − a)"},
+ {g:"Applications",n:"Linear approximation",f:"f(x) ≈ f(a) + f′(a)(x − a)"},
+ {g:"Applications",n:"Average value",f:"f_avg = (1/(b − a)) ∫ₐᵇ f(x) dx"},
+ {g:"Applications",n:"Area between curves",f:"A = ∫ₐᵇ [top − bottom] dx"},
+ {g:"Applications",n:"Disc / washer volume",f:"V = π ∫ₐᵇ (R² − r²) dx"},
+ {g:"Applications",n:"Cross-section volume",f:"V = ∫ₐᵇ A(x) dx"},
+ {g:"Applications",n:"Arc length (BC)",f:"L = ∫ₐᵇ √(1 + (f′(x))²) dx"},
+ {g:"Applications",n:"Exponential growth",f:"dy/dt = ky  ⟹  y = y₀eᵏᵗ"},
+ {g:"Applications",n:"Logistic growth (BC)",f:"dP/dt = kP(1 − P/L)"},
+ {g:"Parametric, polar, vector",n:"Parametric slope",f:"dy/dx = (dy/dt)/(dx/dt)"},
+ {g:"Parametric, polar, vector",n:"Parametric arc length",f:"L = ∫ √((dx/dt)² + (dy/dt)²) dt"},
+ {g:"Parametric, polar, vector",n:"Polar area",f:"A = ½ ∫ r² dθ"},
+ {g:"Parametric, polar, vector",n:"Polar conversion",f:"x = r cos θ,   y = r sin θ,   r² = x² + y²"},
+ {g:"Parametric, polar, vector",n:"Speed",f:"|v(t)| = √((x′(t))² + (y′(t))²)"},
+ {g:"Series",n:"Geometric series",f:"Σ<sub>n=0</sub><sup>∞</sup> arⁿ = a/(1 − r),  |r| < 1"},
+ {g:"Series",n:"p-series",f:"Σ 1/nᵖ converges ⟺ p > 1"},
+ {g:"Series",n:"Ratio test",f:"L = lim |aₙ₊₁/aₙ|:  L < 1 converges, L > 1 diverges"},
+ {g:"Series",n:"Taylor series",f:"f(x) = Σ f⁽ⁿ⁾(a)/n! · (x − a)ⁿ"},
+ {g:"Series",n:"eˣ",f:"eˣ = 1 + x + x²/2! + x³/3! + …"},
+ {g:"Series",n:"sin x",f:"sin x = x − x³/3! + x⁵/5! − …"},
+ {g:"Series",n:"cos x",f:"cos x = 1 − x²/2! + x⁴/4! − …"},
+ {g:"Series",n:"1/(1 − x)",f:"1/(1 − x) = 1 + x + x² + x³ + …,  |x| < 1"},
+ {g:"Series",n:"ln(1 + x)",f:"ln(1 + x) = x − x²/2 + x³/3 − …,  −1 < x ≤ 1"},
+ {g:"Series",n:"Lagrange error bound",f:"|Rₙ(x)| ≤ M|x − a|ⁿ⁺¹/(n + 1)!"},
+ {g:"Series",n:"Alternating series error",f:"|error| ≤ |first omitted term|"},
+];
+
+/* ===== Core ===== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const app = $("#app");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const topicById = id => TOPICS.find(t => t.id === id);
+const LEVELS = {1:"Easy",2:"Medium",3:"Hard"};
+
+const KEY = "calc-lab-v2";
+function loadState(){ try{ return JSON.parse(localStorage.getItem(KEY) || "null"); }catch(e){ return null; } }
+const DEFAULTS = {course:"AB", examDate:"", stats:{}, lessons:{}, frq:{}, frqDraft:{}, timed:[], time:0, tutorStyle:"hint"};
+const S = Object.assign(structuredClone(DEFAULTS), loadState() || {});
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+const courseTopics = () => TOPICS.filter(t => S.course === "BC" || t.course === "AB");
+
+function recordAnswer(topic, ok){
+  const st = S.stats[topic] || (S.stats[topic] = {r:0, t:0});
+  st.t++; if(ok) st.r++; save();
+}
+function topicProgress(id){
+  const s = S.stats[id]; const acc = s && s.t ? s.r / s.t : 0; const vol = s ? Math.min(1, s.t / 10) : 0;
+  return Math.round(100 * (0.2 * (S.lessons[id] ? 1 : 0) + 0.8 * acc * vol));
+}
+
+/* Unicode-ish markdown for Claude output */
+function md(t){
+  let h = esc(t).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`([^`]+)`/g, "<span class='m'>$1</span>");
+  return h.split(/\n{2,}/).map(b => {
+    const lines = b.split("\n").filter(l => l.trim() !== "");
+    if(!lines.length) return "";
+    if(lines.every(l => /^\s*[-•*]\s+/.test(l))) return "<ul>" + lines.map(l => "<li>" + l.replace(/^\s*[-•*]\s+/, "") + "</li>").join("") + "</ul>";
+    if(lines.every(l => /^\s*\d+[.)]\s+/.test(l))) return "<ol>" + lines.map(l => "<li>" + l.replace(/^\s*\d+[.)]\s+/, "") + "</li>").join("") + "</ol>";
+    return "<p>" + lines.join("<br>") + "</p>";
+  }).join("");
+}
+
+/* Claude (sample) */
+let sample = null;
+function errCopy(e){
+  const c = e && e.code;
+  if(c === "not_granted") return "Claude wasn't allowed for this page. Reload and choose Allow to use it.";
+  if(c === "rate_limited") return "Too many requests at once. Wait a minute, then try again.";
+  if(c === "cancelled") return "Stopped.";
+  if(c === "bad_shape") return "Claude's answer came back in an unexpected format. Try again.";
+  return "Claude couldn't answer that request. Try again in a moment.";
+}
+function handleSampleError(e){ if(e && e.code === "not_granted"){ sample = null; document.body.classList.remove("claude"); } }
+(async () => {
+  try{ sample = window.claude && window.claude.use ? await window.claude.use("sample") : null; }catch(e){ sample = null; }
+  document.body.classList.toggle("claude", !!sample);
+})();
+
+/* Router */
+let cleanups = [];
+const onLeave = fn => cleanups.push(fn);
+const PAGES = {};
+const TITLES = {home:"Home", learn:"Learn", practice:"Practice", tools:"Tools", visualize:"Visualize", formulas:"Formula sheet", mistakes:"Common mistakes", progress:"Progress"};
+function route(){
+  cleanups.forEach(f => { try{ f(); }catch(e){} }); cleanups = [];
+  const parts = (location.hash.replace(/^#\/?/, "") || "home").split("/");
+  const page = PAGES[parts[0]] ? parts[0] : "home";
+  $$("nav.main a").forEach(a => { if(a.dataset.p === page) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  document.title = "Calc Lab · " + TITLES[page];
+  app.innerHTML = "";
+  PAGES[page](parts.slice(1));
+  window.scrollTo(0, 0);
+  $(`nav.main a[data-p="${page}"]`)?.scrollIntoView({block:"nearest", inline:"nearest"});
+}
+window.addEventListener("hashchange", route);
+function subnav(items, cur){
+  return `<nav class="subnav" aria-label="Section">${items.map(([href, label, key]) => `<a href="${href}" ${key === cur ? 'aria-current="page"' : ""}>${label}</a>`).join("")}</nav>`;
+}
+
+/* Course toggle */
+function syncCourse(){
+  $$("#courseSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.c === S.course ? "true" : "false"));
+}
+$$("#courseSeg button").forEach(b => b.addEventListener("click", () => { S.course = b.dataset.c; save(); syncCourse(); route(); }));
+
+/* Practice time tracking */
+setInterval(() => {
+  if(document.visibilityState === "visible" && /^#\/practice/.test(location.hash)){ S.time += 5; save(); }
+}, 5000);
+
+/* ===== Canvas helpers ===== */
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function colors(){ return {curve:cssv("--curve"), tan:cssv("--tangent"), grid:cssv("--grid"), ink:cssv("--ink"), soft:cssv("--ink-soft"), rect:cssv("--rect"), edge:cssv("--rect-edge"), surf:cssv("--surface"), green:cssv("--green"), purple:cssv("--purple"), pencil:cssv("--pencil")}; }
+function setupCanvas(canvas){
+  const box = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.max(1, Math.round(box.width * dpr)); canvas.height = Math.max(1, Math.round(box.height * dpr));
+  const ctx = canvas.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return {ctx, W:box.width, H:box.height};
+}
+function makeView(W, H, x0, x1, y0, y1){ return {W, H, x0, x1, y0, y1, px:x => (x - x0) / (x1 - x0) * W, py:y => H - (y - y0) / (y1 - y0) * H}; }
+const nice = v => { if(!isFinite(v)) return isNaN(v) ? "undefined" : (v > 0 ? "∞" : "−∞"); const r = Math.round(v); const s = Math.abs(v - r) < 1e-9 ? String(r) : String(+v.toFixed(4)); return s.replace("-", "−"); };
+const fmt = (v, d=4) => !isFinite(v) ? (isNaN(v) ? "undefined" : (v > 0 ? "∞" : "−∞")) : (+v.toFixed(d)).toString().replace("-", "−");
+function drawGrid(ctx, v, C){
+  const step = span => { const r = span / 8, p = Math.pow(10, Math.floor(Math.log10(r))); const m = r / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; };
+  const sx = step(v.x1 - v.x0), sy = step(v.y1 - v.y0);
+  ctx.clearRect(0, 0, v.W, v.H);
+  ctx.lineWidth = 1; ctx.strokeStyle = C.grid; ctx.fillStyle = C.soft; ctx.font = "12px " + cssv("--body");
+  const ax = Math.min(Math.max(v.py(0) + 14, 14), v.H - 4), ay = Math.min(Math.max(v.px(0) + 4, 4), v.W - 40);
+  for(let x = Math.ceil(v.x0 / sx) * sx; x <= v.x1; x += sx){ ctx.beginPath(); ctx.moveTo(v.px(x), 0); ctx.lineTo(v.px(x), v.H); ctx.stroke(); if(Math.abs(x) > sx / 1e6) ctx.fillText(fmt(x, 2), v.px(x) + 3, ax); }
+  for(let y = Math.ceil(v.y0 / sy) * sy; y <= v.y1; y += sy){ ctx.beginPath(); ctx.moveTo(0, v.py(y)); ctx.lineTo(v.W, v.py(y)); ctx.stroke(); if(Math.abs(y) > sy / 1e6) ctx.fillText(fmt(y, 2), ay, v.py(y) - 3); }
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5;
+  if(v.y0 < 0 && v.y1 > 0){ ctx.beginPath(); ctx.moveTo(0, v.py(0)); ctx.lineTo(v.W, v.py(0)); ctx.stroke(); }
+  if(v.x0 < 0 && v.x1 > 0){ ctx.beginPath(); ctx.moveTo(v.px(0), 0); ctx.lineTo(v.px(0), v.H); ctx.stroke(); }
+}
+function plotCurve(ctx, v, g, color, width, dash){
+  ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash || []); ctx.beginPath();
+  const span = v.y1 - v.y0; let pen = false, prev = null;
+  for(let i = 0; i <= 900; i++){
+    const x = v.x0 + (v.x1 - v.x0) * i / 900; let y; try{ y = g(x); }catch(e){ y = NaN; }
+    if(!isFinite(y) || y < v.y0 - span * 3 || y > v.y1 + span * 3 || (prev !== null && Math.abs(y - prev) > span * 0.9)){ pen = false; prev = isFinite(y) ? y : null; continue; }
+    if(!pen){ ctx.moveTo(v.px(x), v.py(y)); pen = true; } else ctx.lineTo(v.px(x), v.py(y));
+    prev = y;
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+}
+function dot(ctx, v, x, y, color, hollow, r=5.5){
+  ctx.beginPath(); ctx.arc(v.px(x), v.py(y), r, 0, Math.PI * 2);
+  if(hollow){ ctx.fillStyle = cssv("--surface"); ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke(); }
+  else { ctx.fillStyle = color; ctx.fill(); }
+}
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ===== Home ===== */
+PAGES.home = () => {
+  const ab = TOPICS.filter(t => t.course === "AB"), bc = TOPICS.filter(t => t.course === "BC");
+  const card = t => `<a class="tcard" href="#/learn/${t.id}"><b>${esc(t.name)}</b><span class="note">${t.units}${S.lessons[t.id] ? ' · <span class="done">✓ read</span>' : ""}</span><div class="bar" aria-label="${topicProgress(t.id)}% progress"><i style="width:${topicProgress(t.id)}%"></i></div></a>`;
+  app.innerHTML = `<div class="page">
+    <div class="hero">
+      <div>
+        <p class="note" style="margin:0 0 6px">Welcome to Calc Lab</p>
+        <h1 class="title">Learn AP Calculus step by step</h1>
+        <p class="lead" style="margin-bottom:0">Lessons that explain why the math works, practice with full solutions, AP-style free-response questions, and tools that show the reasoning — not just the answer.</p>
+      </div>
+      <div class="hero-graph"><canvas id="heroCanvas" aria-label="A tangent line sliding along a curve"></canvas><span class="cap" id="heroCap"></span></div>
+    </div>
+    <div class="quick">
+      <a href="#/learn"><span class="e">📚</span><b>Lessons</b><span class="note">Every AB and BC topic</span></a>
+      <a href="#/practice"><span class="e">✏️</span><b>Practice</b><span class="note">Easy, medium, hard</span></a>
+      <a href="#/tools/calc"><span class="e">🧮</span><b>Calculator</b><span class="note">Answers with reasoning</span></a>
+      <a href="#/tools/graph"><span class="e">📈</span><b>Graphs</b><span class="note">Analyze any f(x)</span></a>
+      <a href="#/practice/frq"><span class="e">📝</span><b>AP Exam Prep</b><span class="note">Free response and timed sets</span></a>
+    </div>
+    <h2>AP Calculus AB</h2>
+    <div class="topic-cards" style="margin-bottom:26px">${ab.map(card).join("")}</div>
+    <h2>AP Calculus BC <span class="note" style="font-family:var(--body);font-weight:400;font-size:.95rem">— everything in AB, plus</span></h2>
+    <div class="topic-cards">${bc.map(card).join("")}</div>
+  </div>`;
+  const canvas = $("#heroCanvas"), cap = $("#heroCap");
+  const f = x => Math.sin(x) + 0.25 * x, fp = x => Math.cos(x) + 0.25;
+  let raf, t0 = performance.now();
+  function frame(now){
+    const {ctx, W, H} = setupCanvas(canvas); const C = colors();
+    const v = makeView(W, H, -1, 8, -1.8, 3.4);
+    drawGrid(ctx, v, C); plotCurve(ctx, v, f, C.curve, 3);
+    const x = reduceMotion() ? 2.2 : 3.5 + 3.2 * Math.sin((now - t0) / 2600);
+    const y = f(x), m = fp(x);
+    ctx.strokeStyle = C.tan; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(v.px(x - 2), v.py(y - 2 * m)); ctx.lineTo(v.px(x + 2), v.py(y + 2 * m)); ctx.stroke();
+    dot(ctx, v, x, y, C.tan);
+    cap.textContent = `slope f′(${x.toFixed(2)}) = ${fmt(m, 2)}`;
+    if(!reduceMotion()) raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  onLeave(() => cancelAnimationFrame(raf));
+};
+
+/* ===== Learn ===== */
+PAGES.learn = ([id]) => {
+  if(id && LESSONS[id]) return renderLesson(id);
+  const list = course => TOPICS.filter(t => t.course === course).map(t => `
+    <a class="tcard" href="#/learn/${t.id}"><b>${esc(t.name)}</b><span class="note">${t.units}${S.lessons[t.id] ? ' · <span class="done">✓ read</span>' : ""}</span><span class="note">${LESSONS[t.id].intro[0].split(". ")[0]}.</span></a>`).join("");
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Learn</h1>
+    <p class="lead">Each lesson covers the key ideas, a worked example, a "Why does this work?" explanation, and the mistakes that cost students points.</p>
+    <h2>AP Calculus AB</h2>
+    <p class="note" style="margin-top:0">Organized by the College Board's course units.</p>
+    <div class="topic-cards" style="margin-bottom:28px">${list("AB")}</div>
+    <h2>AP Calculus BC</h2>
+    <p class="note" style="margin-top:0">BC includes all of AB plus these topics (and a few extra techniques marked <span class="badge">BC</span> inside the AB lessons).</p>
+    <div class="topic-cards">${list("BC")}</div>
+  </div>`;
+};
+function renderLesson(id){
+  const L = LESSONS[id], T = topicById(id);
+  const i = TOPICS.findIndex(t => t.id === id), prev = TOPICS[i - 1], next = TOPICS[i + 1];
+  app.innerHTML = `<div class="page lesson">
+    <p class="note" style="margin:0 0 4px"><a href="#/learn">Learn</a> / AP Calculus ${T.course} · ${T.units}</p>
+    <h1 class="title">${esc(T.name)}</h1>
+    ${L.intro.map(p => `<p>${p}</p>`).join("")}
+    <h2 style="margin-top:22px">Key ideas</h2>
+    <ul class="keys">${L.keys.map(k => `<li>${k}</li>`).join("")}</ul>
+    <div class="box ex"><h3>Worked example</h3><p class="m" style="font-size:1.15rem;margin:0 0 8px">${L.example.q}</p><ol>${L.example.steps.map(s => `<li>${s}</li>`).join("")}</ol></div>
+    <div class="box why"><h3>🧠 Why does this work?</h3><p style="margin:0 0 6px"><b>${L.why.q}</b></p><p style="margin:0">${L.why.a}</p></div>
+    <div class="box warn"><h3>⚠️ Common mistake${L.mistakes.length > 1 ? "s" : ""}</h3>${L.mistakes.map(m => `<div class="mistake"><div class="bad">✗ ${m.bad}</div><div>✓ ${m.fix}</div></div>`).join("")}</div>
+    <div class="row">
+      <a class="btn primary" href="#/practice/mc/${id}">Practice this topic</a>
+      ${L.viz ? `<a class="btn" href="#/visualize/${L.viz}">See it visualized</a>` : ""}
+      <button class="btn quiet" id="markRead" aria-pressed="${!!S.lessons[id]}">${S.lessons[id] ? "✓ Marked as read" : "Mark as read"}</button>
+    </div>
+    <div class="lesson-nav">
+      ${prev ? `<a class="btn quiet" href="#/learn/${prev.id}">← ${esc(prev.name)}</a>` : "<span></span>"}
+      ${next ? `<a class="btn quiet" href="#/learn/${next.id}">${esc(next.name)} →</a>` : ""}
+    </div>
+  </div>`;
+  $("#markRead").onclick = e => { S.lessons[id] = !S.lessons[id]; save(); e.target.textContent = S.lessons[id] ? "✓ Marked as read" : "Mark as read"; };
+}
+
+/* ===== Formula sheet ===== */
+PAGES.formulas = () => {
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Formula sheet</h1>
+    <p class="lead">Search by name or symbol — try "chain", "sin", "volume", or "series".</p>
+    <input type="text" class="search" id="fq" placeholder="Search formulas…" aria-label="Search formulas">
+    <div id="fout"></div></div>`;
+  const render = () => {
+    const q = $("#fq").value.trim().toLowerCase();
+    const plain = s => s.replace(/<[^>]+>/g, "").toLowerCase();
+    const hits = FORMULAS.filter(f => !q || plain(f.n + " " + f.f + " " + f.g).includes(q));
+    const hl = s => q ? esc(s).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), m => `<mark>${m}</mark>`) : esc(s);
+    const groups = [...new Set(hits.map(f => f.g))];
+    $("#fout").innerHTML = groups.length ? groups.map(g => `<section class="fgroup"><h2>${g}</h2><div class="flist">${hits.filter(f => f.g === g).map(f => `<div class="fitem"><div class="fn">${hl(f.n)}</div><div class="fx">${f.f}</div></div>`).join("")}</div></section>`).join("")
+      : `<p>No formulas match "${esc(q)}". Try a shorter word, like "trig" or "area".</p>`;
+  };
+  $("#fq").addEventListener("input", render); render();
+};
+
+/* ===== Common mistakes ===== */
+PAGES.mistakes = () => {
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Common mistakes</h1>
+    <p class="lead">Students lose more AP points to conceptual slips than to hard calculations. Read these before a test.</p>
+    ${courseTopics().map(t => `<div class="box warn"><h3>⚠️ ${esc(t.name)}</h3>${LESSONS[t.id].mistakes.map(m => `<div class="mistake"><div class="bad">✗ ${m.bad}</div><div>✓ ${m.fix}</div></div>`).join("")}<p style="margin:10px 0 0"><a href="#/learn/${t.id}">Review the lesson</a></p></div>`).join("")}
+    <div class="box warn"><h3>⚠️ Exam habits</h3>${EXAM_MISTAKES.map(m => `<div class="mistake"><div class="bad">✗ ${m.bad}</div><div>✓ ${m.fix}</div></div>`).join("")}</div>
+  </div>`;
+};
+
+/* ===== Progress ===== */
+PAGES.progress = () => {
+  const tops = courseTopics();
+  const all = Object.values(S.stats).reduce((a, s) => ({r:a.r + s.r, t:a.t + s.t}), {r:0, t:0});
+  const mastered = tops.filter(t => topicProgress(t.id) >= 80).length;
+  const mins = Math.round(S.time / 60);
+  const frqDone = Object.values(S.frq);
+  const frqPct = frqDone.length ? Math.round(100 * frqDone.reduce((a, f) => a + f.score, 0) / frqDone.reduce((a, f) => a + f.max, 0)) : null;
+  const d = S.examDate ? Math.ceil((new Date(S.examDate + "T08:00:00") - new Date()) / 86400000) : null;
+  const focus = tops.slice().sort((a, b) => topicProgress(a.id) - topicProgress(b.id))[0];
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Progress</h1>
+    <p class="lead">Progress per topic blends reading the lesson (20%) with practice accuracy (80%). Accuracy counts fully once you've answered 10 questions in a topic.</p>
+    <div class="stats">
+      <div class="stat"><b>${all.t}</b><span>Questions completed</span></div>
+      <div class="stat"><b>${all.t ? Math.round(100 * all.r / all.t) + "%" : "—"}</b><span>Accuracy</span></div>
+      <div class="stat"><b>${mastered}/${tops.length}</b><span>Topics mastered (80%+)</span></div>
+      <div class="stat"><b>${mins < 60 ? mins + " min" : (mins / 60).toFixed(1) + " h"}</b><span>Practice time</span></div>
+      <div class="stat"><b>${frqPct === null ? "—" : frqPct + "%"}</b><span>Free-response score${frqDone.length ? ` (${frqDone.length} done)` : ""}</span></div>
+    </div>
+    <div class="sheet">
+      <ul class="prog-list">${tops.map(t => { const p = topicProgress(t.id), s = S.stats[t.id]; return `<li><span><a href="#/learn/${t.id}">${esc(t.name)}</a><br><span class="note">${s ? `${s.r}/${s.t} correct` : "no practice yet"}${S.lessons[t.id] ? " · lesson read" : ""}</span></span><div class="bar"><i style="width:${p}%"></i></div><span class="pct">${p}%</span></li>`; }).join("")}</ul>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="sheet">
+        <h3>Exam countdown</h3>
+        <label class="lbl">Exam date <input type="date" id="examDate" value="${S.examDate}"></label>
+        <p class="note">Check the College Board AP exam schedule for your official date.</p>
+        ${d === null ? "" : d < 0 ? "<p>That date has passed. Update it for your next exam.</p>" : `<div class="countdown"><span class="n">${d}</span><span>day${d === 1 ? "" : "s"} to go</span></div>`}
+      </div>
+      <div class="sheet">
+        <h3>Study next</h3>
+        <p style="margin:0 0 10px"><b>${esc(focus.name)}</b> has your lowest progress (${topicProgress(focus.id)}%).</p>
+        <div class="row"><a class="btn" href="#/learn/${focus.id}">Review lesson</a><a class="btn primary" href="#/practice/mc/${focus.id}">Practice it</a></div>
+      </div>
+    </div>
+    <div class="sheet needs-claude" style="margin-top:16px">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">Week-by-week plan</h3><button class="btn primary" id="makePlan">Write my plan with Claude</button></div>
+      <div class="planout" id="planOut"><p class="note">Claude builds a schedule from your progress and exam date, putting weaker topics first.</p></div>
+    </div>
+    <p style="margin-top:22px"><button class="btn quiet small" id="resetAll">Reset all progress</button> <span class="note" id="resetNote"></span></p>
+  </div>`;
+  $("#examDate").onchange = e => { S.examDate = e.target.value; save(); PAGES.progress(); };
+  let armed = false;
+  $("#resetAll").onclick = () => {
+    if(!armed){ armed = true; $("#resetNote").textContent = "Click again to erase scores, lessons read, and practice time."; return; }
+    const keep = {course:S.course, examDate:S.examDate, tutorStyle:S.tutorStyle};
+    Object.assign(S, structuredClone(DEFAULTS), keep); save(); PAGES.progress();
+  };
+  $("#makePlan").onclick = async () => {
+    if(!sample) return;
+    const btn = $("#makePlan"), out = $("#planOut");
+    const rows = tops.map(t => { const s = S.stats[t.id]; return `${t.name}: progress ${topicProgress(t.id)}%, lesson ${S.lessons[t.id] ? "read" : "not read"}, practice ${s ? `${s.r}/${s.t}` : "none"}`; }).join("\n");
+    btn.disabled = true; out.innerHTML = '<p class="note">Thinking…</p>';
+    try{
+      const {text} = await sample(`Make a realistic week-by-week study plan for a high school student preparing for the AP Calculus ${S.course} exam.
+Days until exam: ${d === null || d < 0 ? "unknown (assume about 8 weeks)" : d}.
+Topics and progress:
+${rows}
+
+Put weak or unstarted topics earlier and give them more time; keep strong ones in light mixed review. Reserve the final 1–2 weeks for full practice exams and free-response practice. For each week give the focus topics, 2–3 concrete tasks, and one checkpoint. Under 300 words. Plain text, "Week 1:" headings, "-" bullets, Unicode math only (no LaTeX).`,
+        {modelTier:"default", cache:false, onText:({text}) => { out.innerHTML = md(text); }});
+      out.innerHTML = md(text);
+    }catch(e){ out.innerHTML = e && e.text ? md(e.text) : `<p>${esc(errCopy(e))}</p>`; handleSampleError(e); }
+    finally{ btn.disabled = false; }
+  };
+};
+
+/* ===== Practice ===== */
+const P = {topic:"all", level:0, current:null, last:-1, source:"bank"};
+const PRACTICE_NAV = [["#/practice/mc","Multiple choice","mc"],["#/practice/frq","Free response","frq"],["#/practice/timed","Timed practice","timed"]];
+
+PAGES.practice = ([sub, arg]) => {
+  if(sub === "frq") return arg ? renderFRQ(arg) : renderFRQList();
+  if(sub === "timed") return renderTimed();
+  if(arg && topicById(arg)){ P.topic = arg; P.current = null; }
+  renderMC();
+};
+
+function questionPool(){
+  const ok = courseTopics().map(t => t.id);
+  return BANK.map((q, i) => ({q, i})).filter(x => ok.includes(x.q.t) && (P.topic === "all" || x.q.t === P.topic) && (!P.level || x.q.l === P.level));
+}
+function pickQuestion(){
+  const pool = questionPool(); if(!pool.length) return null;
+  let p; do{ p = pool[Math.floor(Math.random() * pool.length)]; } while(pool.length > 1 && p.i === P.last);
+  P.last = p.i; return p.q;
+}
+
+function renderMC(){
+  if(P.topic !== "all" && !courseTopics().some(t => t.id === P.topic)) P.topic = "all";
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "mc")}
+    <div class="practice-grid">
+      <div>
+        <div class="row" style="margin-bottom:14px;align-items:flex-end">
+          <label class="lbl">Topic
+            <select id="pTopic"><option value="all">All topics</option>${courseTopics().map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join("")}</select></label>
+          <div class="lbl">Difficulty
+            <div class="seg levels" id="pLevel" role="group" aria-label="Difficulty">${[[0,"Any"],[1,"Easy"],[2,"Medium"],[3,"Hard"]].map(([v, l]) => `<button data-v="${v}" aria-pressed="${P.level === v}">${l}</button>`).join("")}</div></div>
+        </div>
+        <div class="sheet" id="qCard" aria-live="polite"></div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn" id="skipQ">New question</button>
+          <button class="btn quiet needs-claude" id="genQ">Write a new one with Claude</button>
+        </div>
+      </div>
+      <aside><h3>Accuracy by topic</h3><ul class="scores" id="scoreList"></ul></aside>
+    </div></div>`;
+  $("#pTopic").value = P.topic;
+  $("#pTopic").onchange = e => { P.topic = e.target.value; showQuestion(pickQuestion()); };
+  $$("#pLevel button").forEach(b => b.onclick = () => { P.level = +b.dataset.v; $$("#pLevel button").forEach(x => x.setAttribute("aria-pressed", x === b)); showQuestion(pickQuestion()); });
+  $("#skipQ").onclick = () => showQuestion(pickQuestion());
+  $("#genQ").onclick = generateQuestion;
+  showQuestion(P.current && (P.topic === "all" || P.current.t === P.topic) ? P.current : pickQuestion(), P.source);
+  renderScores();
+}
+function renderScores(){
+  const el = $("#scoreList"); if(!el) return;
+  el.innerHTML = courseTopics().map(t => { const s = S.stats[t.id]; const pct = s && s.t ? Math.round(100 * s.r / s.t) : null;
+    return `<li>${esc(t.name)} <span class="note">${pct === null ? "—" : `${pct}% (${s.r}/${s.t})`}</span><div class="bar"><i style="width:${pct || 0}%"></i></div></li>`; }).join("");
+}
+function showQuestion(q, source="bank"){
+  P.current = q; P.source = source;
+  const card = $("#qCard");
+  if(!q){ card.innerHTML = `<p style="margin:0 0 10px">There are no built-in ${P.level ? LEVELS[P.level].toLowerCase() + " " : ""}questions for this topic yet.</p><p class="note" style="margin:0">Choose another difficulty, or ask Claude to write one.</p>`; return; }
+  card.innerHTML = `
+    <div class="qmeta">${esc(topicById(q.t).name)} · ${LEVELS[q.l]}${source === "claude" ? " · written by Claude" : ""}</div>
+    <p class="qtext">${q.q}</p>
+    <div class="opts">${q.o.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>
+    <div id="fb"></div>`;
+  $$("#qCard .opt").forEach(b => b.onclick = () => answerMC(+b.dataset.i));
+}
+function feedbackHTML(q, chosen){
+  const ok = chosen === q.a;
+  return `<div class="feedback ${ok ? "good" : "bad"}">
+    <strong>${ok ? "✓ Correct." : chosen === null ? `No answer. The answer is ${"ABCD"[q.a]}.` : `✗ Incorrect. The answer is ${"ABCD"[q.a]}.`}</strong>
+    <p>${q.e}</p>
+    <h4>Step-by-step solution</h4><ol>${q.s.map(s => `<li>${s}</li>`).join("")}</ol>
+    <h4>Related concept</h4><p>${q.c} <a href="#/learn/${q.t}">Review ${esc(topicById(q.t).name)}</a></p>
+  </div>`;
+}
+function answerMC(i){
+  const q = P.current, ok = i === q.a;
+  recordAnswer(q.t, ok);
+  $$("#qCard .opt").forEach((b, j) => { b.disabled = true; if(j === q.a) b.classList.add("right"); else if(j === i) b.classList.add("wrong"); });
+  $("#fb").innerHTML = feedbackHTML(q, i) + `<div class="row" style="margin-top:12px"><button class="btn primary" id="fbNext">Next question</button><button class="btn quiet needs-claude" id="fbAsk">Ask the tutor about this</button></div>`;
+  $("#fbNext").onclick = () => showQuestion(pickQuestion());
+  $("#fbAsk").onclick = () => {
+    const plain = h => { const d = document.createElement("div"); d.innerHTML = h; return d.textContent; };
+    TUTOR_PREFILL = `I'm working on this question: "${plain(q.q)}" Options: ${q.o.map((o, j) => `${"ABCD"[j]}) ${plain(o)}`).join("  ")}. ${ok ? "I got it right, but can you explain the idea more deeply?" : `I chose ${"ABCD"[i]}, but the answer is ${"ABCD"[q.a]}. Can you help me see where my thinking went wrong?`}`;
+    location.hash = "#/tools/tutor";
+  };
+  renderScores();
+}
+async function generateQuestion(){
+  if(!sample) return;
+  const btn = $("#genQ"); const tops = courseTopics();
+  const t = P.topic === "all" ? tops[Math.floor(Math.random() * tops.length)] : topicById(P.topic);
+  const lvl = P.level || 2;
+  btn.disabled = true; $("#qCard").innerHTML = `<p class="note">Claude is writing a ${LEVELS[lvl].toLowerCase()} ${esc(t.name)} question…</p>`;
+  try{
+    const d = await sample.json(`Write ONE original AP Calculus ${S.course} multiple-choice question on "${t.name}" at ${LEVELS[lvl].toLowerCase()} difficulty (easy = one-step skill, medium = typical AP question, hard = multi-step AP question). Double-check the math so exactly one option is correct.
+Use plain Unicode math only (x², √, ∫, π, →, ≤, ′). No LaTeX, markdown, or HTML.
+Return ONLY JSON: {"question": string, "options": [4 strings], "answer": 0-3, "explanation": "one sentence on the key move", "steps": ["step 1", "step 2", ...], "concept": "the related concept in one sentence"}`, {modelTier:"default", cache:false});
+    if(!d || typeof d.question !== "string" || !Array.isArray(d.options) || d.options.length !== 4 || !(d.answer >= 0 && d.answer <= 3) || !Array.isArray(d.steps)) throw {code:"bad_shape"};
+    showQuestion({t:t.id, l:lvl, q:esc(d.question), o:d.options.map(o => esc(String(o))), a:+d.answer, e:esc(String(d.explanation || "")), s:d.steps.map(s => esc(String(s))), c:esc(String(d.concept || ""))}, "claude");
+  }catch(e){
+    $("#qCard").innerHTML = `<p>${esc(errCopy(e))}</p>`; handleSampleError(e);
+  }finally{ btn.disabled = false; }
+}
+
+/* ----- Timed practice ----- */
+let TT = null;
+function renderTimed(){
+  if(TT && TT.running) return drawTimedQuestion();
+  if(TT && TT.done) return drawTimedResults();
+  const best = S.timed.slice(-5).reverse();
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "timed")}
+    <div class="sheet" style="max-width:640px">
+      <h2>Timed practice</h2>
+      <p>A mixed set from your ${S.course} topics, answered against the clock like the exam's multiple-choice section. You'll see your score and every solution at the end.</p>
+      <div class="row" style="align-items:flex-end;margin:14px 0">
+        <label class="lbl">Questions <select id="tN"><option>5</option><option selected>10</option><option>15</option></select></label>
+        <label class="lbl">Minutes per question <select id="tM"><option value="1.5">1½</option><option value="2" selected>2</option><option value="3">3</option></select></label>
+        <button class="btn primary" id="tStart">Start</button>
+      </div>
+      ${best.length ? `<h3>Recent results</h3><ul>${best.map(r => `<li>${r.score}/${r.n} · ${new Date(r.date).toLocaleDateString()}</li>`).join("")}</ul>` : ""}
+    </div></div>`;
+  $("#tStart").onclick = () => {
+    const ok = courseTopics().map(t => t.id);
+    const pool = BANK.filter(q => ok.includes(q.t)).sort(() => Math.random() - .5);
+    const n = Math.min(+$("#tN").value, pool.length);
+    TT = {qs:pool.slice(0, n), ans:Array(n).fill(null), idx:0, end:Date.now() + n * +$("#tM").value * 60000, running:true};
+    drawTimedQuestion();
+  };
+}
+function drawTimedQuestion(){
+  const q = TT.qs[TT.idx];
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "timed")}
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <span class="note">Question ${TT.idx + 1} of ${TT.qs.length} · ${TT.ans.filter(a => a !== null).length} answered</span>
+      <span class="timer" id="tClock" aria-live="off"></span>
+    </div>
+    <div class="sheet">
+      <div class="qmeta">${esc(topicById(q.t).name)}</div>
+      <p class="qtext">${q.q}</p>
+      <div class="opts">${q.o.map((o, i) => `<button class="opt ${TT.ans[TT.idx] === i ? "sel" : ""}" data-i="${i}" aria-pressed="${TT.ans[TT.idx] === i}"><span class="k">${"ABCD"[i]}</span><span>${o}</span></button>`).join("")}</div>
+    </div>
+    <div class="row" style="margin-top:14px;justify-content:space-between">
+      <div class="row"><button class="btn" id="tPrev" ${TT.idx === 0 ? "disabled" : ""}>Previous</button><button class="btn" id="tNext" ${TT.idx === TT.qs.length - 1 ? "disabled" : ""}>Next</button></div>
+      <button class="btn primary" id="tFinish">Finish and score</button>
+    </div></div>`;
+  $$(".opt").forEach(b => b.onclick = () => { TT.ans[TT.idx] = +b.dataset.i; if(TT.idx < TT.qs.length - 1){ TT.idx++; } drawTimedQuestion(); });
+  $("#tPrev").onclick = () => { TT.idx--; drawTimedQuestion(); };
+  $("#tNext").onclick = () => { TT.idx++; drawTimedQuestion(); };
+  $("#tFinish").onclick = finishTimed;
+  const tick = () => {
+    const left = Math.max(0, TT.end - Date.now()); const el = $("#tClock"); if(!el) return;
+    el.textContent = `${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, "0")}`;
+    el.classList.toggle("low", left < 60000);
+    if(left <= 0) finishTimed();
+  };
+  tick(); const iv = setInterval(tick, 500); onLeave(() => clearInterval(iv));
+}
+function finishTimed(){
+  if(!TT || !TT.running) return;
+  TT.running = false; TT.done = true;
+  let score = 0; TT.qs.forEach((q, i) => { const ok = TT.ans[i] === q.a; if(ok) score++; recordAnswer(q.t, ok); });
+  TT.score = score; S.timed.push({score, n:TT.qs.length, date:Date.now()}); S.timed = S.timed.slice(-20); save();
+  cleanups.forEach(f => { try{ f(); }catch(e){} }); cleanups = [];
+  drawTimedResults();
+}
+function drawTimedResults(){
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "timed")}
+    <div class="sheet"><h2>You scored ${TT.score} out of ${TT.qs.length}</h2>
+      <p class="note" style="margin:0">${Math.round(100 * TT.score / TT.qs.length)}% correct. Review each question below.</p>
+      <div class="row" style="margin-top:12px"><button class="btn primary" id="tAgain">Start a new set</button></div></div>
+    ${TT.qs.map((q, i) => `<div class="sheet" style="margin-top:14px"><div class="qmeta">Question ${i + 1} · ${esc(topicById(q.t).name)}${TT.ans[i] !== null ? ` · you chose ${"ABCD"[TT.ans[i]]}` : ""}</div><p class="qtext">${q.q}</p>
+      <div class="opts">${q.o.map((o, j) => `<div class="opt ${j === q.a ? "right" : j === TT.ans[i] ? "wrong" : ""}"><span class="k">${"ABCD"[j]}</span><span>${o}</span></div>`).join("")}</div>${feedbackHTML(q, TT.ans[i])}</div>`).join("")}
+  </div>`;
+  $("#tAgain").onclick = () => { TT = null; renderTimed(); };
+}
+
+/* ----- Free response ----- */
+function renderFRQList(){
+  const list = FRQS.filter(f => S.course === "BC" || topicById(f.topic).course === "AB");
+  const item = f => { const done = S.frq[f.id]; const max = f.parts.reduce((a, p) => a + p.pts, 0);
+    return `<div class="frq-item"><div><b style="font-family:var(--display)">${esc(f.title)}</b> <span class="tag ${f.calc ? "calc" : "nocalc"}">${f.calc ? "Calculator required" : "No calculator"}</span><br><span class="note">${f.parts.length} parts · ${max} points · ${f.minutes} minutes${done ? ` · last score ${done.score}/${done.max}` : ""}</span></div><a class="btn ${done ? "" : "primary"}" href="#/practice/frq/${f.id}">${done ? "Try again" : "Start"}</a></div>`; };
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "frq")}
+    <p class="lead">AP-style free-response questions, scored out of 9 like the real exam. Write your work, submit, then compare with the full solution and scoring guidelines.</p>
+    <h2>Calculator not allowed</h2><div class="frq-list" style="margin-bottom:24px">${list.filter(f => !f.calc).map(item).join("")}</div>
+    <h2>Calculator required</h2><div class="frq-list">${list.filter(f => f.calc).map(item).join("")}</div>
+  </div>`;
+}
+function renderFRQ(id){
+  const F = FRQS.find(f => f.id === id); if(!F) return renderFRQList();
+  const max = F.parts.reduce((a, p) => a + p.pts, 0);
+  const draft = S.frqDraft[id] || {};
+  let left = F.minutes * 60, running = false, iv = null;
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Practice</h1>
+    ${subnav(PRACTICE_NAV, "frq")}
+    <div class="sheet">
+      <div class="row" style="justify-content:space-between;align-items:flex-start">
+        <div><h2 style="margin-bottom:2px">${esc(F.title)}</h2><span class="tag ${F.calc ? "calc" : "nocalc"}">${F.calc ? "Calculator required" : "No calculator"}</span> <span class="note">${max} points</span></div>
+        <div style="text-align:right"><div class="timer" id="fClock">${F.minutes}:00</div><div class="row" style="justify-content:flex-end"><button class="btn small" id="fStart">Start timer</button><button class="btn small quiet" id="fReset">Reset</button></div></div>
+      </div>
+      <p class="frq-stem m" style="margin-top:14px">${F.stem}</p>
+      ${F.calc ? '<p class="note">Give decimal answers correct to three places. Show the setup (for example, the integral) before using your calculator.</p>' : '<p class="note">Show your work. Answers without supporting work usually earn no credit.</p>'}
+      ${F.parts.map(p => `<div class="frq-part" id="part-${p.p}">
+        <b>(${p.p})</b> <span>${p.q}</span> <span class="note">(${p.pts} points)</span>
+        <textarea data-p="${p.p}" aria-label="Your answer to part ${p.p}" placeholder="Your work and answer…">${esc(draft[p.p] || "")}</textarea>
+        <div class="reveal"></div></div>`).join("")}
+      <div class="row" style="margin-top:16px"><button class="btn primary" id="fSubmit">Submit</button><span class="note" id="fStatus"></span></div>
+      <div id="fTotal"></div>
+    </div></div>`;
+  $$("textarea[data-p]").forEach(t => t.addEventListener("input", () => { (S.frqDraft[id] = S.frqDraft[id] || {})[t.dataset.p] = t.value; save(); }));
+  const clock = () => { const el = $("#fClock"); if(!el) return; el.textContent = left > 0 ? `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}` : "Time's up"; el.classList.toggle("low", left < 120); };
+  $("#fStart").onclick = () => {
+    running = !running; $("#fStart").textContent = running ? "Pause" : "Resume";
+    if(running) iv = setInterval(() => { if(left > 0){ left--; clock(); } }, 1000); else clearInterval(iv);
+  };
+  $("#fReset").onclick = () => { clearInterval(iv); running = false; left = F.minutes * 60; $("#fStart").textContent = "Start timer"; clock(); };
+  onLeave(() => clearInterval(iv));
+  $("#fSubmit").onclick = async () => {
+    clearInterval(iv); running = false; $("#fStart").disabled = true;
+    const answers = {}; $$("textarea[data-p]").forEach(t => { answers[t.dataset.p] = t.value.trim(); t.readOnly = true; });
+    delete S.frqDraft[id]; save();
+    $("#fSubmit").disabled = true;
+    const scores = {};
+    const drawTotal = () => {
+      const total = F.parts.reduce((a, p) => a + (scores[p.p] ?? 0), 0);
+      S.frq[id] = {score:total, max, date:Date.now()}; save();
+      $("#fTotal").innerHTML = `<div class="feedback good" style="margin-top:16px"><strong>Score: <span class="pts">${total} / ${max}</span></strong><p>Adjust any part's points with the selectors if you disagree — your total updates automatically.</p></div>`;
+    };
+    F.parts.forEach(p => {
+      scores[p.p] = 0;
+      $(`#part-${p.p} .reveal`).innerHTML = `<div class="solution feedback"><h4 style="margin-top:0">Solution</h4><ol>${p.sol.map(s => `<li class="m">${s}</li>`).join("")}</ol></div>
+        <div class="rubric"><b>AP scoring guidelines (${p.pts} pts)</b><ul>${p.rub.map(r => `<li>${r}</li>`).join("")}</ul>
+        <div class="ai-fb" style="margin-top:8px"></div>
+        <label class="lbl" style="flex-direction:row;align-items:center;gap:8px;margin-top:8px">Points earned <select data-s="${p.p}">${Array.from({length:p.pts + 1}, (_, k) => `<option value="${k}">${k}</option>`).join("")}</select></label></div>`;
+    });
+    $$("select[data-s]").forEach(s => s.onchange = () => { scores[s.dataset.s] = +s.value; drawTotal(); });
+    drawTotal();
+    if(!sample){ $("#fStatus").textContent = "Score each part yourself using the guidelines."; return; }
+    $("#fStatus").textContent = "Claude is scoring your answers against the guidelines…";
+    try{
+      const res = await sample.json(`You are an AP Calculus reader scoring a student's free-response answer. Score strictly by the rubric, the way AP readers do: award a point only when the student's work earns it; an answer with no supporting work earns no points where the rubric requires work. Be encouraging but honest.
+
+Question stem: ${F.stem}
+${F.parts.map(p => `Part (${p.p}) [${p.pts} pts]: ${p.q}
+Official solution: ${p.sol.join(" ")}
+Rubric: ${p.rub.join("; ")}
+Student answer: ${answers[p.p] ? answers[p.p] : "(blank)"}`).join("\n\n")}
+
+Return ONLY JSON: {"parts":[{"part":"a","points":integer,"feedback":"1-2 sentences: what earned points and what was missing"}, ...]} with one entry per part.`, {modelTier:"default", cache:false});
+      if(!res || !Array.isArray(res.parts)) throw {code:"bad_shape"};
+      res.parts.forEach(r => {
+        const p = F.parts.find(x => x.p === String(r.part).replace(/[()]/g, "").trim().toLowerCase()); if(!p) return;
+        const pts = Math.max(0, Math.min(p.pts, Math.round(+r.points || 0)));
+        scores[p.p] = pts; $(`select[data-s="${p.p}"]`).value = pts;
+        $(`#part-${p.p} .ai-fb`).innerHTML = `<b>Claude's scoring:</b> ${pts}/${p.pts}. ${esc(r.feedback || "")}`;
+      });
+      drawTotal(); $("#fStatus").textContent = "";
+    }catch(e){
+      $("#fStatus").textContent = errCopy(e) + " Score each part yourself using the guidelines."; handleSampleError(e);
+    }
+  };
+}
+
+/* ===== Math parsing helpers (math.js) ===== */
+const SUP = "⁰¹²³⁴⁵⁶⁷⁸⁹";
+const FN_NAMES = "sin|cos|tan|sec|csc|cot|ln|log|sqrt|exp|asin|acos|atan|abs";
+function normalize(src){
+  let s = String(src).trim().replace(/^\s*(f\s*\(\s*x\s*\)|y)\s*=\s*/i, "");
+  s = s.replace(/[−–]/g, "-").replace(/[·×]/g, "*").replace(/÷/g, "/").replace(/π/g, "pi").replace(/∞/g, "Infinity");
+  s = s.replace(/[⁻⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, m => "^(" + [...m].map(c => c === "⁻" ? "-" : SUP.indexOf(c)).join("") + ")");
+  s = s.replace(/√\s*\(/g, "sqrt(").replace(/√\s*([a-z0-9.]+)/gi, "sqrt($1)");
+  s = s.replace(/\barc(sin|cos|tan)\b/g, "a$1");
+  s = s.replace(new RegExp("\\b(" + FN_NAMES + ")\\s+([a-z0-9.]+(?:\\^[0-9]+)?)", "gi"), "$1($2)");
+  s = s.replace(/\bln\s*\(/g, "log(");
+  s = s.replace(/\|([^|]+)\|/g, "abs($1)");
+  s = s.replace(new RegExp("(\\d|\\bx|\\))\\s*(?=(e\\^|pi\\b|(?:" + FN_NAMES + ")\\(|x\\b|\\())", "g"), "$1*");
+  return s;
+}
+function compileExpr(src){
+  const node = math.parse(normalize(src));
+  const code = node.compile();
+  const f = x => { try{ const v = code.evaluate({x}); if(typeof v === "number") return v; if(v && typeof v.re === "number") return Math.abs(v.im) < 1e-12 ? v.re : NaN; return NaN; }catch(e){ return NaN; } };
+  code.evaluate({x:0.7318}); // throws on unknown symbols
+  return {node, f};
+}
+function pretty(n){
+  let s = typeof n === "string" ? n : n.toString();
+  s = s.replace(/\s*\^\s*/g, "^").replace(/\bpi\b/g, "π").replace(/\blog\(/g, "ln(").replace(/\bsqrt\(/g, "√(").replace(/\ba(sin|cos|tan)\(/g, "arc$1(");
+  s = s.replace(/\^\((-?\d+)\)/g, (m, d) => [...d].map(c => c === "-" ? "⁻" : SUP[+c]).join(""));
+  s = s.replace(/\^(\d+)(?![\d.])/g, (m, d) => [...d].map(c => SUP[+c]).join(""));
+  s = s.replace(/(\d) \* (?=[a-zπ√(])/g, "$1").replace(/ \* /g, "·").replace(/-/g, "−");
+  return s;
+}
+function dx(node){
+  const d = math.derivative(node, "x");
+  try{ const s = math.simplify(d); if(s.toString().length < d.toString().length) return s; }catch(e){}
+  return d;
+}
+function uniq(arr, tol){ const out = []; arr.sort((a, b) => a - b).forEach(v => { if(!out.length || Math.abs(v - out[out.length - 1]) > tol) out.push(v); }); return out; }
+function findRoots(g, a, b, N=2400){
+  const xs = [], ys = [];
+  for(let i = 0; i <= N; i++){ const x = a + (b - a) * i / N; xs.push(x); ys.push(g(x)); }
+  const roots = [], breaks = [], tol = (b - a) * 1e-7;
+  const finite = ys.filter(isFinite); const scale = finite.length ? Math.max(...finite.map(Math.abs)) : 1;
+  for(let i = 0; i < N; i++){
+    const y0 = ys[i], y1 = ys[i + 1];
+    if(isFinite(y0) !== isFinite(y1)){
+      let lo = xs[i], hi = xs[i + 1]; const loF = isFinite(y0);
+      for(let k = 0; k < 60; k++){ const m = (lo + hi) / 2; if(isFinite(g(m)) === loF) lo = m; else hi = m; }
+      breaks.push((lo + hi) / 2);
+    }
+    if(!isFinite(y0) || !isFinite(y1)) continue;
+    if(y0 === 0){ roots.push(xs[i]); continue; }
+    if(y0 * y1 < 0){
+      let lo = xs[i], hi = xs[i + 1], glo = y0;
+      for(let k = 0; k < 70; k++){ const m = (lo + hi) / 2, gm = g(m); if(!isFinite(gm)) break; if(gm * glo <= 0) hi = m; else { lo = m; glo = gm; } }
+      const r = (lo + hi) / 2, gr = g(r);
+      if(isFinite(gr) && Math.abs(gr) < 1e-6 * (1 + Math.abs(y0) + Math.abs(y1))) roots.push(r); else breaks.push(r);
+    }
+  }
+  for(let i = 1; i < N; i++){
+    const [a0, a1, a2] = [ys[i - 1], ys[i], ys[i + 1]].map(Math.abs);
+    if(!isFinite(a0) || !isFinite(a1) || !isFinite(a2) || !(a1 <= a0 && a1 <= a2) || ys[i - 1] * ys[i + 1] < 0 || a1 > 0.02 * (scale + 1)) continue;
+    let lo = xs[i - 1], hi = xs[i + 1];
+    for(let k = 0; k < 80; k++){ const m1 = lo + (hi - lo) * 0.382, m2 = lo + (hi - lo) * 0.618; if(Math.abs(g(m1)) < Math.abs(g(m2))) hi = m2; else lo = m1; }
+    const r = (lo + hi) / 2; if(Math.abs(g(r)) < 1e-9) roots.push(r);
+  }
+  const snap = v => Math.abs(v - Math.round(v)) < 1e-7 ? Math.round(v) : v;
+  return {roots:uniq(roots.map(snap), Math.max(tol, 1e-6)), breaks:uniq(breaks.map(snap), Math.max(tol, 1e-5))};
+}
+function signIntervals(g, a, b, soft, hard){
+  const cuts = [...soft.map(x => ({x, hard:false})), ...hard.map(x => ({x, hard:true}))].filter(c => c.x > a && c.x < b).sort((p, q) => p.x - q.x);
+  const pts = [{x:a, hard:true}, ...cuts, {x:b, hard:true}], segs = [];
+  for(let i = 0; i < pts.length - 1; i++){
+    const p = pts[i].x, q = pts[i + 1].x; if(q - p < 1e-9) continue;
+    const s = Math.sign(g((p + q) / 2)); if(!isFinite(s) || isNaN(s) || s === 0) continue;
+    const prev = segs[segs.length - 1];
+    if(prev && prev.s === s && Math.abs(prev.q - p) < 1e-9 && !pts[i].hard) prev.q = q; else segs.push({p, q, s});
+  }
+  return segs;
+}
+const ivl = segs => segs.length ? segs.map(g => `(${nice(g.p)}, ${nice(g.q)})`).join(" ∪ ") : "none in this window";
+
+/* ===== Tools ===== */
+const TOOLS_NAV = [["#/tools/graph","Graphing calculator","graph"],["#/tools/calc","Calculus calculator","calc"],["#/tools/tutor","Ask a tutor","tutor"]];
+PAGES.tools = ([sub, arg]) => {
+  if(sub === "calc") return renderCalc(arg);
+  if(sub === "tutor") return renderTutor();
+  renderGraph();
+};
+
+/* ----- Graphing ----- */
+const G = {expr:"x^2 - 4x + 3", xmin:-2, xmax:6, show:{f:true, d1:true, d2:false}};
+function renderGraph(){
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Tools</h1>
+    ${subnav(TOOLS_NAV, "graph")}
+    <p class="lead">Type any function of x. You'll get its graph, first and second derivatives, zeros, extrema, and where it increases, decreases, and bends.</p>
+    <div class="sheet">
+      <div class="row" style="align-items:flex-end">
+        <label class="lbl" style="flex:1;min-width:220px">f(x) =
+          <input type="text" class="mathin" id="gExpr" value="${esc(G.expr)}" spellcheck="false" autocomplete="off"></label>
+        <label class="lbl">x from <input type="number" id="gMin" value="${G.xmin}" step="any" style="width:90px"></label>
+        <label class="lbl">to <input type="number" id="gMax" value="${G.xmax}" step="any" style="width:90px"></label>
+        <button class="btn primary" id="gGo">Graph</button>
+      </div>
+      <div class="chips">${["x^2 - 4x + 3","x^3 - 3x","x·e^(−x)","sin(x) + cos(2x)","x^4 − 4x^2","ln(x)/x","(x^2 − 1)/(x − 2)"].map(c => `<button class="chip" data-c="${esc(c)}">${esc(pretty(c))}</button>`).join("")}</div>
+      <p class="note" style="margin:0">Use ^ for powers, and write functions with parentheses: sin(x), ln(x), sqrt(x), e^(2x).</p>
+    </div>
+    <div class="legend" style="margin-top:14px">
+      <label><input type="checkbox" data-s="f" ${G.show.f ? "checked" : ""}><span class="sw" style="background:var(--curve)"></span> f(x)</label>
+      <label><input type="checkbox" data-s="d1" ${G.show.d1 ? "checked" : ""}><span class="sw" style="background:var(--tangent)"></span> f′(x)</label>
+      <label><input type="checkbox" data-s="d2" ${G.show.d2 ? "checked" : ""}><span class="sw" style="background:var(--purple)"></span> f″(x)</label>
+    </div>
+    <div class="canvas-box"><canvas id="gCanvas" aria-label="Graph of f"></canvas></div>
+    <div id="gOut"></div>
+    <p class="note">Results are found numerically within the window shown. Points where f′ doesn't exist (corners, cusps) aren't listed as critical points.</p>
+  </div>`;
+  const go = () => { G.expr = $("#gExpr").value; G.xmin = +$("#gMin").value; G.xmax = +$("#gMax").value; drawGraph(); };
+  $("#gGo").onclick = go;
+  $("#gExpr").addEventListener("keydown", e => { if(e.key === "Enter") go(); });
+  $$(".chip[data-c]").forEach(c => c.onclick = () => { $("#gExpr").value = c.dataset.c; go(); });
+  $$(".legend input").forEach(i => i.onchange = () => { G.show[i.dataset.s] = i.checked; drawGraph(); });
+  const rz = () => drawGraph(); window.addEventListener("resize", rz); onLeave(() => window.removeEventListener("resize", rz));
+  drawGraph();
+}
+function drawGraph(){
+  const out = $("#gOut"), canvas = $("#gCanvas"); if(!out) return;
+  if(!window.math){ out.innerHTML = '<p class="err">The math library didn\'t load. Check your connection and reload the page.</p>'; return; }
+  let a = G.xmin, b = G.xmax;
+  if(!(isFinite(a) && isFinite(b) && b > a)){ out.innerHTML = '<p class="err">Set the window so the left x-value is less than the right one.</p>'; return; }
+  let F, d1, d2;
+  try{
+    F = compileExpr(G.expr);
+    d1 = dx(F.node); d2 = dx(d1);
+  }catch(e){ out.innerHTML = `<p class="err">Couldn't read "${esc(G.expr)}". Check the parentheses and use x as the variable — for example 3x^2 + sin(x).</p>`; const {ctx, W, H} = setupCanvas(canvas); ctx.clearRect(0, 0, W, H); return; }
+  const f = F.f, c1 = d1.compile(), c2 = d2.compile();
+  const ev = c => x => { try{ const v = c.evaluate({x}); return typeof v === "number" ? v : NaN; }catch(e){ return NaN; } };
+  const fp = ev(c1), fpp = ev(c2);
+  // analysis
+  const zf = findRoots(f, a, b), z1 = findRoots(fp, a, b), z2 = findRoots(fpp, a, b);
+  const hard = uniq([...zf.breaks, ...z1.breaks, ...z2.breaks], 1e-6);
+  const del = (b - a) * 1e-4;
+  const maxes = [], mins = [];
+  z1.roots.forEach(r => { if(!isFinite(f(r))) return; const L = Math.sign(fp(r - del)), R = Math.sign(fp(r + del)); if(L > 0 && R < 0) maxes.push(r); if(L < 0 && R > 0) mins.push(r); });
+  const infl = z2.roots.filter(r => isFinite(f(r)) && Math.sign(fpp(r - del)) * Math.sign(fpp(r + del)) < 0);
+  const inc = signIntervals(fp, a, b, z1.roots, hard), cc = signIntervals(fpp, a, b, z2.roots, hard);
+  const pt = x => `(${nice(x)}, ${nice(f(x))})`;
+  const list = (arr, fn) => arr.length ? arr.map(fn).join(", ") : "none in this window";
+  out.innerHTML = `<div class="analysis">
+    <div><h4>f′(x)</h4><p>${esc(pretty(d1))}</p></div>
+    <div><h4>f″(x)</h4><p>${esc(pretty(d2))}</p></div>
+    <div><h4>Zeros of f</h4><p>${list(zf.roots, x => "x = " + nice(x))}</p></div>
+    <div><h4>Local maximum</h4><p>${list(maxes, pt)}</p></div>
+    <div><h4>Local minimum</h4><p>${list(mins, pt)}</p></div>
+    <div><h4>Increasing (f′ &gt; 0)</h4><p>${ivl(inc.filter(s => s.s > 0))}</p></div>
+    <div><h4>Decreasing (f′ &lt; 0)</h4><p>${ivl(inc.filter(s => s.s < 0))}</p></div>
+    <div><h4>Concave up (f″ &gt; 0)</h4><p>${ivl(cc.filter(s => s.s > 0))}</p></div>
+    <div><h4>Concave down (f″ &lt; 0)</h4><p>${ivl(cc.filter(s => s.s < 0))}</p></div>
+    <div><h4>Inflection points</h4><p>${list(infl, pt)}</p></div>
+  </div>`;
+  // plot
+  const vals = [];
+  for(let i = 0; i <= 600; i++){ const x = a + (b - a) * i / 600; const y = f(x); if(isFinite(y)) vals.push(y); }
+  vals.sort((p, q) => p - q);
+  let y0 = vals.length ? vals[Math.floor(vals.length * 0.03)] : -1, y1 = vals.length ? vals[Math.ceil(vals.length * 0.97) - 1] : 1;
+  y0 = Math.min(y0, 0); y1 = Math.max(y1, 0); if(y1 - y0 < 1e-6){ y0 -= 1; y1 += 1; }
+  const pad = (y1 - y0) * 0.12; y0 -= pad; y1 += pad;
+  const {ctx, W, H} = setupCanvas(canvas), C = colors(), v = makeView(W, H, a, b, y0, y1);
+  drawGrid(ctx, v, C);
+  if(G.show.d2) plotCurve(ctx, v, fpp, C.purple, 2, [3, 4]);
+  if(G.show.d1) plotCurve(ctx, v, fp, C.tan, 2, [7, 5]);
+  if(G.show.f){
+    plotCurve(ctx, v, f, C.curve, 3);
+    const inView = x => { const y = f(x); return y > y0 && y < y1; };
+    zf.roots.filter(inView).forEach(x => dot(ctx, v, x, 0, C.ink, false, 4.5));
+    maxes.filter(inView).forEach(x => dot(ctx, v, x, f(x), C.tan));
+    mins.filter(inView).forEach(x => dot(ctx, v, x, f(x), C.green));
+    infl.filter(inView).forEach(x => dot(ctx, v, x, f(x), C.purple, true));
+  }
+}
+
+/* ----- Calculus calculator ----- */
+const CALC = {mode:"derivative", expr:"x^3 sin(x)", at:"", a:"", b:"", to:"0", eq:"x^3 - 2x = 1", lo:"-10", hi:"10", lexpr:"sin(x)/x", iexpr:"x e^(x^2)"};
+const MODES = [["derivative","Derivative"],["integral","Integral"],["limit","Limit"],["solve","Solve"],["graph","Graph"]];
+function renderCalc(mode){
+  if(mode && MODES.some(m => m[0] === mode)) CALC.mode = mode;
+  if(CALC.mode === "graph"){ G.expr = CALC.expr; location.hash = "#/tools/graph"; return; }
+  const m = CALC.mode;
+  const field = (id, label, val, extra="") => `<label class="lbl" ${extra}>${label}<input type="text" class="mathin" id="${id}" value="${esc(val)}" spellcheck="false" autocomplete="off"></label>`;
+  let inputs = "";
+  if(m === "derivative") inputs = field("cExpr", "Find d/dx of", CALC.expr, 'style="flex:1;min-width:220px"') + field("cAt", "Evaluate at x = (optional)", CALC.at);
+  if(m === "integral") inputs = field("cExpr", "Integrate", CALC.iexpr, 'style="flex:1;min-width:220px"') + field("cA", "From (optional)", CALC.a) + field("cB", "To (optional)", CALC.b);
+  if(m === "limit") inputs = field("cExpr", "Limit of", CALC.lexpr, 'style="flex:1;min-width:220px"') + field("cTo", "as x →", CALC.to);
+  if(m === "solve") inputs = field("cExpr", "Solve for x", CALC.eq, 'style="flex:1;min-width:220px"') + field("cLo", "Search x from", CALC.lo) + field("cHi", "to", CALC.hi);
+  const hint = {derivative:"Example: x^3 sin(x), e^(2x) ln(x), (x^2 + 1)/(x − 3)",
+    integral:"Leave the bounds blank for an antiderivative (uses Claude, checked by differentiating). Fill both for a definite integral.",
+    limit:"Enter a number, pi/2, or inf for ∞. Example: (1 − cos(x))/x^2 as x → 0",
+    solve:"Write an equation like x^3 − 2x = 1, or an expression to set equal to 0."}[m];
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Tools</h1>
+    ${subnav(TOOLS_NAV, "calc")}
+    <p class="lead">Pick an operation and enter a function. You'll get the answer, then the reasoning behind it, step by step.</p>
+    <div class="sheet">
+      <div class="seg" role="group" aria-label="Operation" style="margin-bottom:14px">${MODES.map(([k, l]) => `<button data-m="${k}" aria-pressed="${k === m}">${l}</button>`).join("")}</div>
+      <div class="row" style="align-items:flex-end">${inputs}<button class="btn primary" id="cGo">Calculate</button></div>
+      <p class="note" style="margin-bottom:0">${hint}</p>
+      <div class="calc-out" id="cOut" aria-live="polite"></div>
+    </div></div>`;
+  $$("[data-m]").forEach(b => b.onclick = () => { stash(); location.hash = "#/tools/calc/" + b.dataset.m; });
+  $("#cGo").onclick = runCalc;
+  $$(".sheet input").forEach(i => i.addEventListener("keydown", e => { if(e.key === "Enter") runCalc(); }));
+}
+function stash(){
+  const v = id => $("#" + id) ? $("#" + id).value : undefined;
+  if(CALC.mode === "derivative"){ CALC.expr = v("cExpr"); CALC.at = v("cAt"); }
+  if(CALC.mode === "integral"){ CALC.iexpr = v("cExpr"); CALC.a = v("cA"); CALC.b = v("cB"); }
+  if(CALC.mode === "limit"){ CALC.lexpr = v("cExpr"); CALC.to = v("cTo"); }
+  if(CALC.mode === "solve"){ CALC.eq = v("cExpr"); CALC.lo = v("cLo"); CALC.hi = v("cHi"); }
+}
+function numIn(s){ const t = normalize(s).replace(/^\+/, ""); if(/^-?inf(inity)?$/i.test(t)) return t.startsWith("-") ? -Infinity : Infinity; const v = math.evaluate(t); if(typeof v !== "number") throw new Error("not a number"); return v; }
+function simpson(f, a, b, n=4000){
+  const e = (b - a) * 1e-9; const fa = isFinite(f(a)) ? f(a) : f(a + e), fb = isFinite(f(b)) ? f(b) : f(b - e);
+  const h = (b - a) / n; let s = fa + fb; for(let i = 1; i < n; i++) s += f(a + i * h) * (i % 2 ? 4 : 2); return s * h / 3;
+}
+function numericLimit(f, a){
+  const approach = side => {
+    const ks = [1, 2, 3, 4, 5, 6, 7, 8];
+    const xs = !isFinite(a) ? ks.map(k => (a > 0 ? 1 : -1) * Math.pow(10, k)) : ks.map(k => a + side * Math.pow(10, -k));
+    const ys = xs.map(f);
+    if(ys.slice(-4).every(y => !isFinite(y) && !(y === Infinity || y === -Infinity))) return {v:NaN, undef:true};
+    const t = ys.slice(-4);
+    if(t.every(y => isFinite(y) || Math.abs(y) === Infinity) && t.every(y => Math.sign(y) === Math.sign(t[3])) && Math.abs(t[3]) > 1e4 && Math.abs(t[3]) >= Math.abs(t[0]) * 50) return {v:Math.sign(t[3]) * Infinity};
+    let best = -1, bd = Infinity;
+    for(let k = 1; k < ys.length; k++){ if(!isFinite(ys[k]) || !isFinite(ys[k - 1])) continue; const d = Math.abs(ys[k] - ys[k - 1]); if(d < bd){ bd = d; best = k; } }
+    if(best > 0 && bd < 1e-5 * (1 + Math.abs(ys[best]))){ const v = ys[best]; const r = Math.round(v * 1e6) / 1e6; return {v:Math.abs(v - r) < 1e-6 ? r : v}; }
+    return {v:NaN};
+  };
+  if(!isFinite(a)){ const r = approach(1); return {value:r.v, left:r, right:r}; }
+  const L = approach(-1), R = approach(1);
+  if(L.undef && !R.undef) return {value:R.v, left:L, right:R, side:"right"};
+  if(R.undef && !L.undef) return {value:L.v, left:L, right:R, side:"left"};
+  let value;
+  if(isNaN(L.v) || isNaN(R.v)) value = NaN;
+  else if(!isFinite(L.v) || !isFinite(R.v)) value = L.v === R.v ? L.v : NaN;
+  else value = Math.abs(L.v - R.v) < 1e-4 * (1 + Math.abs(L.v)) ? (L.v + R.v) / 2 : NaN;
+  return {value, left:L, right:R};
+}
+async function runCalc(){
+  stash();
+  const out = $("#cOut"); const m = CALC.mode;
+  if(!window.math){ out.innerHTML = '<p class="err">The math library didn\'t load. Check your connection and reload the page.</p>'; return; }
+  let task = "", answer = "", extra = "", needsClaudeAnswer = false, F;
+  try{
+    if(m === "derivative"){
+      F = compileExpr(CALC.expr); const d = dx(F.node);
+      task = `d/dx [${pretty(F.node)}]`; answer = `${task} = ${pretty(d)}`;
+      if(CALC.at.trim()){ const x = numIn(CALC.at); const val = d.compile().evaluate({x}); extra = `At x = ${nice(x)}: f′(${nice(x)}) = ${typeof val === "number" ? nice(val) : "undefined"}`; answer += `; at x = ${nice(x)} the value is ${typeof val === "number" ? nice(val) : "undefined"}`; }
+    }
+    if(m === "integral"){
+      F = compileExpr(CALC.iexpr);
+      const A = CALC.a.trim(), B = CALC.b.trim();
+      if(A && B){
+        const a = numIn(A), b = numIn(B);
+        if(!isFinite(a) || !isFinite(b)) throw new Error("Use finite bounds.");
+        const v = simpson(F.f, a, b);
+        if(!isFinite(v)) throw new Error("The integral doesn't converge numerically on this interval.");
+        task = `∫ from ${pretty(A)} to ${pretty(B)} of ${pretty(F.node)} dx`; answer = `${task} ≈ ${fmt(v, 6)}`;
+        const e = (b - a) * 1e-9, near = [F.f(a), F.f(a + e), F.f(b), F.f(b - e)];
+        if(near.some(y => !isFinite(y) || Math.abs(y) > 1e5)) extra = "f blows up at an endpoint, so this is an improper integral. The numeric estimate may be inaccurate — ask for the reasoning to evaluate it as a limit.";
+      } else if(A || B){ throw new Error("Fill in both bounds for a definite integral, or leave both blank."); }
+      else { task = `∫ ${pretty(F.node)} dx`; needsClaudeAnswer = true; }
+    }
+    if(m === "limit"){
+      F = compileExpr(CALC.lexpr); const a = numIn(CALC.to);
+      const r = numericLimit(F.f, a); const at = isFinite(a) ? nice(a) : (a > 0 ? "∞" : "−∞");
+      task = `lim as x → ${at} of ${pretty(F.node)}`;
+      const show = x => isFinite(x) ? fmt(x, 6) : nice(x);
+      if(isNaN(r.value)){
+        const oneSided = isFinite(a) && !isNaN(r.left.v) && !isNaN(r.right.v);
+        answer = `${task} does not exist` + (oneSided ? ` (from the left → ${show(r.left.v)}, from the right → ${show(r.right.v)})` : " (the values don't settle on a single number)");
+      } else answer = `${task} = ${show(r.value)}` + (r.side ? ` (one-sided, from the ${r.side} — f is undefined on the other side)` : "");
+      if(isFinite(a)){
+        const hs = [1e-2, 1e-3, 1e-4, 1e-5];
+        extra = `<div class="tbl-wrap"><table><thead><tr><th>x</th>${hs.map(h => `<th>${nice(a)} ± ${h}</th>`).join("")}</tr></thead><tbody>
+          <tr><th>from the left</th>${hs.map(h => `<td>${fmt(F.f(a - h), 6)}</td>`).join("")}</tr>
+          <tr><th>from the right</th>${hs.map(h => `<td>${fmt(F.f(a + h), 6)}</td>`).join("")}</tr></tbody></table></div>`;
+      }
+    }
+    if(m === "solve"){
+      const parts = CALC.eq.split("="); if(parts.length > 2) throw new Error("Use a single equals sign.");
+      const L = compileExpr(parts[0]), R = parts[1] !== undefined ? compileExpr(parts[1]) : {f:() => 0, node:math.parse("0")};
+      const lo = numIn(CALC.lo), hi = numIn(CALC.hi); if(!(hi > lo)) throw new Error("The search range needs from < to.");
+      const {roots} = findRoots(x => L.f(x) - R.f(x), lo, hi, 6000);
+      task = `solve ${pretty(L.node)} = ${pretty(R.node)} for x`;
+      answer = roots.length ? `x ≈ ${roots.map(r => fmt(r, 6)).join(",  x ≈ ")}` : `No solutions with x between ${nice(lo)} and ${nice(hi)}`;
+      extra = `Searched ${nice(lo)} ≤ x ≤ ${nice(hi)}.`;
+    }
+  }catch(e){
+    out.innerHTML = `<p class="err">${esc(e && e.message && !/^Unexpected|Undefined|Parenthesis|Value expected/.test(e.message) ? e.message : "Couldn't read that input. Check the parentheses and use x as the variable.")}</p>`; return;
+  }
+  out.innerHTML = `${needsClaudeAnswer ? "" : `<div class="answer">${esc(answer)}</div>`}
+    ${extra ? `<div class="note" style="margin-top:8px">${extra.startsWith("<") ? extra : esc(extra)}</div>` : ""}
+    <div class="row needs-claude" style="margin-top:12px">${needsClaudeAnswer ? "" : '<button class="btn" id="cWhy">Show the reasoning</button>'}</div>
+    <div class="steps" id="cSteps">${needsClaudeAnswer ? "" : ""}</div>
+    ${needsClaudeAnswer ? '<p class="no-claude note">Antiderivatives need Claude, which isn\'t available in this view. Add bounds to get a definite integral instead.</p>' : ""}`;
+  const explain = async (indef) => {
+    if(!sample) return;
+    const box = $("#cSteps"); const btn = $("#cWhy"); if(btn) btn.disabled = true;
+    box.innerHTML = '<p class="note">Claude is working through the steps…</p>';
+    try{
+      const d = await sample.json(indef
+        ? `Find the antiderivative ${task} and explain it step by step for an AP Calculus student, naming each rule or technique (u-substitution, parts, etc.). Plain Unicode math, no LaTeX.
+Return ONLY JSON: {"steps": ["..."], "answer": "the antiderivative + C in plain Unicode", "answer_mathjs": "the antiderivative without + C in math.js syntax (use log(x) for ln, ^ for powers, * for multiplication, e^(...) for exponentials)", "key_idea": "one sentence"}`
+        : `Explain step by step how to find: ${task}.
+The verified correct result is: ${answer}. (It may be a numeric estimate; if an exact value exists, give it and show it matches.)
+Write the reasoning a strong AP Calculus student would show, naming each rule as it's used. Plain Unicode math, no LaTeX.
+Return ONLY JSON: {"steps": ["..."], "answer": "final answer in plain Unicode", "key_idea": "one sentence"}`, {modelTier:"default", cache:false});
+      if(!d || !Array.isArray(d.steps)) throw {code:"bad_shape"};
+      let check = "";
+      if(indef){
+        try{
+          const dd = math.derivative(math.parse(normalize(d.answer_mathjs)), "x").compile();
+          const pts = [0.37, 0.81, 1.23, 1.77, 2.41]; let n = 0, ok = 0;
+          pts.forEach(x => { const a1 = dd.evaluate({x}), a2 = F.f(x); if(typeof a1 === "number" && isFinite(a1) && isFinite(a2)){ n++; if(Math.abs(a1 - a2) < 1e-6 * (1 + Math.abs(a2))) ok++; } });
+          check = n >= 2 && ok === n ? '<p class="note" style="color:var(--green);font-weight:700">✓ Checked: differentiating this answer gives back the integrand.</p>' : '<p class="note err">⚠ This answer couldn\'t be verified automatically. Differentiate it yourself to check.</p>';
+        }catch(e){ check = '<p class="note err">⚠ This answer couldn\'t be verified automatically. Differentiate it yourself to check.</p>'; }
+      }
+      box.innerHTML = `${indef ? `<div class="answer">${esc(task)} = ${esc(d.answer || "")}</div>${check}` : ""}
+        <h3 style="margin-top:14px">Step by step</h3><ol>${d.steps.map(s => `<li class="m">${esc(s)}</li>`).join("")}</ol>
+        ${d.key_idea ? `<div class="box why" style="margin-top:12px"><h3>🧠 Key idea</h3><p style="margin:0">${esc(d.key_idea)}</p></div>` : ""}`;
+    }catch(e){ box.innerHTML = `<p>${esc(errCopy(e))}</p>`; handleSampleError(e); }
+    finally{ if(btn) btn.disabled = false; }
+  };
+  if($("#cWhy")) $("#cWhy").onclick = () => explain(false);
+  if(needsClaudeAnswer) explain(true);
+}
+
+/* ----- Tutor ----- */
+let TUTOR_PREFILL = "", TURNS = [], tutorCtl = null;
+function renderTutor(){
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Tools</h1>
+    ${subnav(TOOLS_NAV, "tutor")}
+    <p class="lead">Ask about any AP Calculus problem or idea. Choose hints to work it out yourself, or full solutions to see every step.</p>
+    <div class="sheet">
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <div class="seg" id="tStyle" role="group" aria-label="Answer style"><button data-s="hint">Hints first</button><button data-s="full">Full solution</button></div>
+        <button class="btn quiet small" id="tClear">Clear chat</button>
+      </div>
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <div class="chips">${["Why is the derivative of sin x equal to cos x?","When do I use u-substitution?","Find dy/dx if x² + xy + y² = 7","How do I justify a relative max on an FRQ?"].map(c => `<button class="chip">${c}</button>`).join("")}</div>
+      <div class="composer needs-claude"><textarea id="ask" placeholder="Ask a calculus question…" aria-label="Your question"></textarea><button class="btn primary" id="send">Send</button><button class="btn hidden" id="stop">Stop</button></div>
+      <p class="note no-claude">The tutor uses Claude, so it only works in the claude.ai version of Calc Lab. Everything else on the site works here.</p>
+    </div></div>`;
+  const syncStyle = () => $$("#tStyle button").forEach(b => b.setAttribute("aria-pressed", b.dataset.s === S.tutorStyle));
+  $$("#tStyle button").forEach(b => b.onclick = () => { S.tutorStyle = b.dataset.s; save(); syncStyle(); }); syncStyle();
+  const chat = $("#chat");
+  if(!TURNS.length) chat.innerHTML = '<div class="empty">Type a problem, paste one from homework, or start with an example below.</div>';
+  TURNS.forEach(t => addMsg(t.role, t.content));
+  $("#tClear").onclick = () => { TURNS = []; chat.innerHTML = '<div class="empty">Type a problem, paste one from homework, or start with an example below.</div>'; };
+  $("#send").onclick = () => sendTutor($("#ask").value);
+  $("#stop").onclick = () => tutorCtl?.abort();
+  $("#ask").addEventListener("keydown", e => { if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); sendTutor(e.target.value); } });
+  $$(".chips .chip").forEach(c => c.onclick = () => sendTutor(c.textContent));
+  if(TUTOR_PREFILL){ $("#ask").value = TUTOR_PREFILL; TUTOR_PREFILL = ""; $("#ask").focus(); }
+  onLeave(() => tutorCtl?.abort());
+}
+function addMsg(role, text){
+  const chat = $("#chat"); chat.querySelector(".empty")?.remove();
+  const d = document.createElement("div"); d.className = "msg " + (role === "user" ? "you" : "ai");
+  if(role === "user") d.textContent = text; else d.innerHTML = md(text);
+  chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d;
+}
+async function sendTutor(text){
+  if(!sample || !text.trim()) return;
+  addMsg("user", text); TURNS.push({role:"user", content:text}); $("#ask").value = "";
+  const out = addMsg("assistant", ""); out.textContent = "Thinking…";
+  $("#send").classList.add("hidden"); $("#stop").classList.remove("hidden");
+  tutorCtl = new AbortController();
+  const style = S.tutorStyle === "hint" ? "Coach with hints: give the next step or a guiding question rather than the full answer, unless the student asks for the full solution or has already tried. Check their work when they show it." : "Give a complete, step-by-step solution, then a one-line summary of the key idea.";
+  const frame = `You are a patient AP Calculus ${S.course} tutor for a high school student. ${style} Write math in plain Unicode (x², √, ∫, π, →, f′(x), ≤) — never LaTeX or $ signs. Keep answers short and clear: numbered steps for procedures, short paragraphs otherwise. Mention how the AP exam expects justification when relevant. If a question isn't about math, gently steer back to calculus.`;
+  const input = TURNS.slice(-12).map((t, i) => i === 0 ? {role:"user", content:frame + "\n\nStudent: " + t.content} : t);
+  if(input[0].role !== "user") input.shift();
+  try{
+    const {text:ans} = await sample(input, {signal:tutorCtl.signal, modelTier:"default", cache:false, onText:({text}) => { out.innerHTML = md(text); const c = $("#chat"); if(c) c.scrollTop = c.scrollHeight; }});
+    out.innerHTML = md(ans); TURNS.push({role:"assistant", content:ans});
+  }catch(e){
+    if(e && e.text){ out.innerHTML = md(e.text); TURNS.push({role:"assistant", content:e.text}); }
+    else { out.textContent = errCopy(e); TURNS.pop(); }
+    handleSampleError(e);
+  }finally{ $("#send")?.classList.remove("hidden"); $("#stop")?.classList.add("hidden"); }
+}
+
+/* ===== Visualizations ===== */
+const FNS = [
+  {label:"x²", f:x => x * x, d:[-3, 3], a:0, b:2},
+  {label:"x³ − 3x", f:x => x ** 3 - 3 * x, d:[-2.5, 2.5], a:-1.5, b:1.5},
+  {label:"sin x", f:Math.sin, d:[-2 * Math.PI, 2 * Math.PI], a:0, b:Math.PI},
+  {label:"e^(x/2)", f:x => Math.exp(x / 2), d:[-3, 3], a:0, b:2},
+  {label:"√x", f:x => x < 0 ? NaN : Math.sqrt(x), d:[0, 6], a:0, b:4},
+];
+const LIMS = [
+  {label:"(x² − 1)/(x − 1) as x → 1", f:x => (x * x - 1) / (x - 1), a:1, d:[-1, 3], L:"2", note:"Undefined at x = 1 (0/0), yet both sides close in on 2. The missing point is a removable discontinuity — a hole."},
+  {label:"sin x / x as x → 0", f:x => Math.sin(x) / x, a:0, d:[-8, 8], L:"1", note:"Undefined at 0, but both sides approach 1. This limit is why d/dx sin x = cos x."},
+  {label:"|x| / x as x → 0", f:x => Math.abs(x) / x, a:0, d:[-3, 3], L:"does not exist", note:"From the left the values are −1; from the right, 1. The one-sided limits disagree, so the limit does not exist (a jump)."},
+  {label:"1/x² as x → 0", f:x => 1 / (x * x), a:0, d:[-3, 3], y:[-1, 12], L:"∞ (unbounded)", note:"Both sides grow without bound, so the limit is ∞. There's a vertical asymptote at x = 0."},
+];
+const V = {mode:"deriv", fn:0, x0:1, h:1, n:4, method:"left", lim:0, lh:0.5, showD:false};
+const STORIES = {deriv:["Function","Secant line","Secant approaches tangent","Derivative"], riemann:["Rectangles","More rectangles","Area under curve"], limit:["Far away","Closer","Very close","The limit"]};
+PAGES.visualize = ([mode]) => {
+  if(mode && STORIES[mode]) V.mode = mode;
+  app.innerHTML = `<div class="page">
+    <h1 class="title">Visualizations</h1>
+    <p class="lead">Press Play to watch each idea unfold, or drag the sliders yourself.</p>
+    ${subnav([["#/visualize/deriv","Derivative","deriv"],["#/visualize/riemann","Riemann sums","riemann"],["#/visualize/limit","Limits","limit"]], V.mode)}
+    <div class="story" id="story" aria-hidden="true">${STORIES[V.mode].map(s => `<span>${s}</span>`).join("")}</div>
+    <div class="canvas-box"><canvas id="vCanvas" aria-label="Interactive graph"></canvas></div>
+    <div class="readout" id="readout"></div>
+    <div class="ctl" id="controls"></div>
+    <div id="vizExtra"></div>
+  </div>`;
+  buildControls(); drawViz();
+  const rz = () => drawViz(); window.addEventListener("resize", rz);
+  onLeave(() => { window.removeEventListener("resize", rz); stopPlay(); });
+};
+let playRaf = null;
+function stopPlay(){ if(playRaf) cancelAnimationFrame(playRaf); playRaf = null; const b = $("#play"); if(b) b.textContent = "▶ Play"; }
+function play(){
+  if(playRaf){ stopPlay(); return; }
+  const dur = 5000, t0 = performance.now(); $("#play").textContent = "❚❚ Pause";
+  const step = now => {
+    const p = Math.min(1, (now - t0) / dur), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    if(V.mode === "deriv"){ V.h = Math.pow(10, 0.3 - 3.3 * e); const s = $("#hd"); if(s) s.value = Math.log10(V.h); }
+    if(V.mode === "riemann"){ V.n = Math.max(1, Math.round(1 + 59 * e)); const s = $("#n"); if(s) s.value = V.n; }
+    if(V.mode === "limit"){ V.lh = Math.pow(10, -3 * e); const s = $("#lh"); if(s) s.value = Math.log10(V.lh); }
+    drawViz();
+    if(p < 1 && !reduceMotion()) playRaf = requestAnimationFrame(step); else { if(reduceMotion()){ if(V.mode==="deriv") V.h = 0.001; if(V.mode==="riemann") V.n = 60; if(V.mode==="limit") V.lh = 0.001; buildControls(); drawViz(); } stopPlay(); }
+  };
+  playRaf = requestAnimationFrame(step);
+}
+function buildControls(){
+  const c = $("#controls"); const playBtn = `<button class="btn primary" id="play">▶ Play</button>`;
+  if(V.mode === "limit"){
+    c.innerHTML = `<label class="lbl">Limit <select id="limSel">${LIMS.map((l, i) => `<option value="${i}">${l.label}</option>`).join("")}</select></label>
+      <label class="lbl">Distance from a: h = <span id="hVal" class="m"></span><input type="range" id="lh" min="-3" max="0" step="0.01" value="${Math.log10(V.lh)}"></label>${playBtn}`;
+    $("#limSel").value = V.lim;
+    $("#limSel").onchange = e => { V.lim = +e.target.value; drawViz(); };
+    $("#lh").oninput = e => { stopPlay(); V.lh = Math.pow(10, +e.target.value); drawViz(); };
+  } else {
+    const F = FNS[V.fn];
+    let h = `<label class="lbl">Function <select id="fnSel">${FNS.map((f, i) => `<option value="${i}">f(x) = ${f.label}</option>`).join("")}</select></label>`;
+    if(V.mode === "deriv") h += `<label class="lbl">Point: x = <span id="x0Val" class="m"></span><input type="range" id="x0" min="${F.d[0] + 0.05}" max="${F.d[1] - 0.05}" step="0.01" value="${V.x0}"></label>
+      <label class="lbl">Secant width: h = <span id="hdVal" class="m"></span><input type="range" id="hd" min="-3" max="0.3" step="0.01" value="${Math.log10(V.h)}"></label>
+      <label class="lbl" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="showD" ${V.showD ? "checked" : ""}> Also graph f′(x)</label>${playBtn}`;
+    else h += `<label class="lbl">Rectangles: n = <span id="nVal" class="m"></span><input type="range" id="n" min="1" max="60" step="1" value="${V.n}"></label>
+      <label class="lbl">Method <select id="method"><option value="left">Left endpoints</option><option value="right">Right endpoints</option><option value="mid">Midpoints</option><option value="trap">Trapezoids</option></select></label>${playBtn}`;
+    c.innerHTML = h;
+    $("#fnSel").value = V.fn;
+    $("#fnSel").onchange = e => { V.fn = +e.target.value; const F = FNS[V.fn]; V.x0 = Math.min(Math.max(1, F.d[0] + 0.5), F.d[1] - 0.5); buildControls(); drawViz(); };
+    if(V.mode === "deriv"){
+      $("#x0").oninput = e => { V.x0 = +e.target.value; drawViz(); };
+      $("#hd").oninput = e => { stopPlay(); V.h = Math.pow(10, +e.target.value); drawViz(); };
+      $("#showD").onchange = e => { V.showD = e.target.checked; drawViz(); };
+    } else {
+      $("#n").oninput = e => { stopPlay(); V.n = +e.target.value; drawViz(); };
+      $("#method").value = V.method; $("#method").onchange = e => { V.method = e.target.value; drawViz(); };
+    }
+  }
+  $("#play").onclick = play;
+}
+function setStory(k){ $$("#story span").forEach((s, i) => s.classList.toggle("on", i <= k)); }
+function drawViz(){
+  const canvas = $("#vCanvas"); if(!canvas) return;
+  const {ctx, W, H} = setupCanvas(canvas); const C = colors();
+  const isLim = V.mode === "limit"; const F = isLim ? LIMS[V.lim] : FNS[V.fn]; const f = F.f;
+  const deriv = (g, x) => (g(x + 1e-5) - g(x - 1e-5)) / 2e-5;
+  let y0, y1;
+  if(F.y) [y0, y1] = F.y;
+  else {
+    y0 = Infinity; y1 = -Infinity;
+    for(let i = 0; i <= 300; i++){ const x = F.d[0] + (F.d[1] - F.d[0]) * i / 300; const y = f(x); if(isFinite(y)){ y0 = Math.min(y0, y); y1 = Math.max(y1, y); } if(V.mode === "deriv" && V.showD){ const d = deriv(f, x); if(isFinite(d) && Math.abs(d) < 50){ y0 = Math.min(y0, d); y1 = Math.max(y1, d); } } }
+    y0 = Math.min(y0, 0); y1 = Math.max(y1, 0); const pad = (y1 - y0) * 0.15 || 1; y0 -= pad; y1 += pad;
+  }
+  const v = makeView(W, H, F.d[0], F.d[1], y0, y1); drawGrid(ctx, v, C);
+  const R = $("#readout"), X = $("#vizExtra");
+  if(V.mode === "riemann"){
+    const a = F.a, b = F.b, n = V.n, w = (b - a) / n;
+    for(let i = 0; i < n; i++){
+      const l = a + i * w, r = l + w; ctx.fillStyle = C.rect; ctx.strokeStyle = C.edge; ctx.lineWidth = 1.2; ctx.beginPath();
+      if(V.method === "trap"){ ctx.moveTo(v.px(l), v.py(0)); ctx.lineTo(v.px(l), v.py(f(l))); ctx.lineTo(v.px(r), v.py(f(r))); ctx.lineTo(v.px(r), v.py(0)); ctx.closePath(); }
+      else { const hh = V.method === "left" ? f(l) : V.method === "right" ? f(r) : f((l + r) / 2); ctx.rect(v.px(l), v.py(Math.max(hh, 0)), v.px(r) - v.px(l), Math.abs(v.py(hh) - v.py(0))); }
+      ctx.fill(); ctx.stroke();
+    }
+    plotCurve(ctx, v, f, C.curve, 2.5);
+    let approx = 0; for(let i = 0; i < n; i++){ const l = a + i * w, r = l + w; approx += (V.method === "left" ? f(l) : V.method === "right" ? f(r) : V.method === "mid" ? f((l + r) / 2) : (f(l) + f(r)) / 2) * w; }
+    const exact = simpson(f, a, b, 2000);
+    $("#nVal").textContent = n; setStory(n <= 4 ? 0 : n <= 20 ? 1 : 2);
+    R.innerHTML = `<div><b>${fmt(approx)}</b><span>Approximation with ${n} ${V.method === "trap" ? "trapezoid" : "rectangle"}${n > 1 ? "s" : ""}</span></div>
+      <div><b>${fmt(exact)}</b><span>Exact area ∫ from ${fmt(a, 3)} to ${fmt(b, 3)}</span></div><div><b>${fmt(approx - exact)}</b><span>Error</span></div>`;
+    X.innerHTML = `<p class="note" style="max-width:70ch">More, thinner rectangles hug the curve more closely and the error shrinks toward 0. The definite integral is defined as that limit. Notice that left endpoints underestimate when f is increasing and overestimate when it's decreasing.</p>`;
+  } else if(V.mode === "deriv"){
+    const x = V.x0, y = f(x), m = deriv(f, x), x2 = Math.min(x + V.h, F.d[1]), ms = (f(x2) - y) / (x2 - x);
+    if(V.showD) plotCurve(ctx, v, t => deriv(f, t), C.green, 2, [6, 5]);
+    plotCurve(ctx, v, f, C.curve, 2.5);
+    if(isFinite(ms)){ ctx.strokeStyle = C.soft; ctx.lineWidth = 1.6; ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.moveTo(v.px(F.d[0]), v.py(y + ms * (F.d[0] - x))); ctx.lineTo(v.px(F.d[1]), v.py(y + ms * (F.d[1] - x))); ctx.stroke(); ctx.setLineDash([]); dot(ctx, v, x2, f(x2), C.soft); }
+    const hsmall = V.h <= 0.05;
+    if(hsmall){ ctx.strokeStyle = C.tan; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(v.px(F.d[0]), v.py(y + m * (F.d[0] - x))); ctx.lineTo(v.px(F.d[1]), v.py(y + m * (F.d[1] - x))); ctx.stroke(); }
+    dot(ctx, v, x, y, C.tan);
+    $("#x0Val").textContent = fmt(x, 2); $("#hdVal").textContent = fmt(x2 - x, 4);
+    setStory(V.h > 0.5 ? 1 : V.h > 0.05 ? 2 : 3);
+    R.innerHTML = `<div><b>${fmt(y)}</b><span>f(${fmt(x, 2)})</span></div><div><b>${fmt(ms)}</b><span>Secant slope [f(x + h) − f(x)] / h</span></div><div><b style="color:var(--tangent)">${fmt(m)}</b><span>Derivative f′(${fmt(x, 2)})</span></div>`;
+    X.innerHTML = `<p class="note" style="max-width:70ch">As h shrinks, the grey secant line pivots toward the tangent line and its slope approaches f′(x). ${hsmall ? "At this tiny h the secant and tangent (red) are nearly identical — that limit is the derivative." : "Keep shrinking h to see the tangent line appear."}${V.showD ? " The green dashed curve is f′(x): it crosses zero wherever f has a flat tangent." : ""}</p>`;
+  } else {
+    const a = F.a, h = V.lh; plotCurve(ctx, v, f, C.curve, 2.5);
+    ctx.strokeStyle = C.soft; ctx.setLineDash([3, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(v.px(a), 0); ctx.lineTo(v.px(a), H); ctx.stroke(); ctx.setLineDash([]);
+    const yl = f(a - h), yr = f(a + h);
+    if(isFinite(yl) && yl <= y1 && yl >= y0) dot(ctx, v, a - h, yl, C.tan);
+    if(isFinite(yr) && yr <= y1 && yr >= y0) dot(ctx, v, a + h, yr, C.green);
+    const lv = f(a + 1e-7), rv = f(a - 1e-7); if(isFinite(lv) && Math.abs(lv - rv) < 1e-4 && lv < y1) dot(ctx, v, a, lv, C.curve, true);
+    $("#hVal").textContent = fmt(h, 4); setStory(h > 0.3 ? 0 : h > 0.03 ? 1 : h > 0.003 ? 2 : 3);
+    R.innerHTML = `<div><b style="color:var(--tangent)">${fmt(yl, 5)}</b><span>f(${fmt(a, 0)} − h), from the left</span></div><div><b style="color:var(--green)">${fmt(yr, 5)}</b><span>f(${fmt(a, 0)} + h), from the right</span></div><div><b>${F.L}</b><span>Limit as x → ${fmt(a, 0)}</span></div>`;
+    const hs = [0.1, 0.01, 0.001, 0.0001];
+    X.innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>h</th>${hs.map(x => `<th>${x}</th>`).join("")}</tr></thead><tbody><tr><th>f(a − h)</th>${hs.map(x => `<td>${fmt(f(a - x), 5)}</td>`).join("")}</tr><tr><th>f(a + h)</th>${hs.map(x => `<td>${fmt(f(a + x), 5)}</td>`).join("")}</tr></tbody></table></div><p class="note" style="max-width:70ch">${F.note}</p>`;
+  }
+}
+
+/* ===== Start ===== */
+syncCourse();
+route();
+
+</script>
+</body>
+</html>
